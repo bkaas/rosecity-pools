@@ -1,0 +1,39 @@
+.teamGrid {
+  display: flex;
+  flex-flow: row wrap;
+}
+
+.teamContainer {
+  flex: 1 150px;
+  border: 2px solid #e0e0e0;
+  /*padding: 1em;*/
+  border-radius: 1em;
+  overflow: auto;
+  margin: 0.5em;
+}
+
+.teamBackground {
+  padding: 1.5em 0.5em;
+  margin: 0.5em;
+  border-radius: 1em;
+  background-color: rgba(245, 245, 245, 1);
+}
+
+.teamContainer table {
+  border-collapse: collapse;
+  /*border: 2px solid red;*/
+  margin: auto;
+}
+
+.teamContainer th, td {
+  /*border: 2px solid red;*/
+  border-bottom: 1px solid;
+  font-family: consolas, lucida console, courier new, monospace;
+  color: #808080;
+}
+
+.teamContainer td {
+  padding: 0.2em 1em;
+  font-style: italic;
+  /*vertical-align: top;*/
+}
