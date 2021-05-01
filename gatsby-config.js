@@ -7,4 +7,8 @@
 module.exports = {
   /* Your site config here */
   plugins: [],
+  proxy: {
+    prefix: "/api",
+    url: "http://localhost:3000",
+  },
 }
