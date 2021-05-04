@@ -59,7 +59,7 @@ export default class TeamGrid extends React.Component {
     super(props);
     this.state = {
       team: [{ // array of team objects
-        name: "Brendan's Team",
+        name: '',
         stats: [{ // array of stats objects
           lastname: '',
           firstname: '',
@@ -84,37 +84,41 @@ export default class TeamGrid extends React.Component {
         // console.log(data[0]);
         // console.log(this.state.team[0]);
 
-        const dataslice = data.slice(0, 50).map( (statRow) => {
-          return ({
-            lastname: statRow.lastname,
-            points: statRow.points,
-            firstname: statRow.firstname,
-            logo: statRow.logo,
-            });
-        });
-
         this.setState({
-          team: [{
-            name: "Brendan",
-            stats: dataslice.slice(0, 10),
-          },
-          {
-            name: "Jacqueline",
-            stats: dataslice.slice(11, 20),
-          },
-          {
-            name: "Jacqueline 2",
-            stats: dataslice.slice(21, 30),
-          },
-          {
-            name: "Jerry",
-            stats: dataslice.slice(31, 40),
-          },
-          {
-            name: "Larry",
-            stats: dataslice.slice(41, 50),
-          }]
-        });
+          team: data,
+        })
+
+        // const dataslice = data.slice(0, 50).map( (statRow) => {
+        //   return ({
+        //     lastname: statRow.lastname,
+        //     points: statRow.points,
+        //     firstname: statRow.firstname,
+        //     logo: statRow.logo,
+        //     });
+        // });
+
+        // this.setState({
+        //   team: [{
+        //     name: "Brendan",
+        //     stats: dataslice.slice(0, 10),
+        //   },
+        //   {
+        //     name: "Jacqueline",
+        //     stats: dataslice.slice(11, 20),
+        //   },
+        //   {
+        //     name: "Jacqueline 2",
+        //     stats: dataslice.slice(21, 30),
+        //   },
+        //   {
+        //     name: "Jerry",
+        //     stats: dataslice.slice(31, 40),
+        //   },
+        //   {
+        //     name: "Larry",
+        //     stats: dataslice.slice(41, 50),
+        //   }]
+        // });
       })
   }
 
