@@ -1,6 +1,6 @@
 import React from "react"
 
-import NavBar from "../components/navBar.js"
+import Layout from "../components/layout.js"
 import * as styles from "../components/teams.module.css"
 
 function TeamTableEntries(props) {
@@ -55,6 +55,7 @@ function Team(props) {
 }
 
 export default class TeamGrid extends React.Component {
+
   constructor(props) {
     super(props);
     this.state = {
@@ -87,38 +88,6 @@ export default class TeamGrid extends React.Component {
         this.setState({
           team: data,
         })
-
-        // const dataslice = data.slice(0, 50).map( (statRow) => {
-        //   return ({
-        //     lastname: statRow.lastname,
-        //     points: statRow.points,
-        //     firstname: statRow.firstname,
-        //     logo: statRow.logo,
-        //     });
-        // });
-
-        // this.setState({
-        //   team: [{
-        //     name: "Brendan",
-        //     stats: dataslice.slice(0, 10),
-        //   },
-        //   {
-        //     name: "Jacqueline",
-        //     stats: dataslice.slice(11, 20),
-        //   },
-        //   {
-        //     name: "Jacqueline 2",
-        //     stats: dataslice.slice(21, 30),
-        //   },
-        //   {
-        //     name: "Jerry",
-        //     stats: dataslice.slice(31, 40),
-        //   },
-        //   {
-        //     name: "Larry",
-        //     stats: dataslice.slice(41, 50),
-        //   }]
-        // });
       })
   }
 
@@ -136,13 +105,12 @@ export default class TeamGrid extends React.Component {
     });
 
     return (
-      <div>
-        <NavBar />
+      <Layout>
         <h1>Teams Page!</h1>
         <div className={styles.teamGrid}>
           {teams}
         </div>
-      </div>
+      </Layout>
     );
   }
 }

@@ -10,7 +10,7 @@ export default function NavBar() {
       <nav className={styles.navbar}>
         <Link to="/">Home</Link>
         <Link to="/teams">Teams</Link>
-        <Link to="#">Draft</Link>
+        <Link to="/draft">Draft</Link>
         <Link to="#">History</Link>
       </nav>
     </Layout>

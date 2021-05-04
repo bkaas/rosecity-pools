@@ -1,11 +1,12 @@
 import React from "react"
 
-import * as styles from "./layout.module.css"
+import NavBar from "./navBar.js"
 
-export default function Layout({ children }) {
+export default function Layout(props) {
   return (
-    <div className={styles.fontWrapper}>
-      {children}
-    </div>
+    <>
+      <NavBar/>
+      {props.children}
+    </>
   );
 }
