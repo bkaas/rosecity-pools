@@ -6,9 +6,15 @@
 
 module.exports = {
   /* Your site config here */
-  plugins: [],
+  plugins: [
+    {
+      resolve: `gatsby-plugin-create-client-paths`,
+      options: { prefixes: [`/draft/*`] },
+    },
+  ],
   proxy: {
     prefix: "/api",
     url: "http://localhost:3000",
   },
+  // Ref: https://www.gatsbyjs.com/plugins/gatsby-plugin-create-client-paths/
 }
