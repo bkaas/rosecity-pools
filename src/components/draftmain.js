@@ -1,25 +1,23 @@
 import React from "react"
 
 // TODO
-// - Admin password allows for
-//  - Add teams to the draft
-//    - Re-arrange team order
-//  - Undo button (undo last pick that continues to the beginning)
+// - Styling
+// - Admin password and panel
+// - Drafter password
+// - Begin draft and grey out sections that can't be used after draft start
+// - Submit draft to database
+// - Autocomplete draft player
+
+
 
 function Pick(roundNo, pickNo, overallPickNo, teamName, playerid, playerName, playerLogo) {
   this.roundNo       = roundNo;
   this.pickNo        = pickNo;
-  this.overallPickNo = overallPickNo;
   this.teamName      = teamName;
   this.playerid      = playerid;
   this.playerName    = playerName;
   this.playerLogo    = playerLogo;
 }
-
-// function Team() {
-//   this.teamName = '';
-//   this.picks    = [];
-// }
 
 
 export default class DraftMain extends React.Component {
@@ -27,27 +25,52 @@ export default class DraftMain extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      teamNames:    [], // Array of strings for each team name in the draft order
-      picks:        [], // Stores an array of Pick() objects
-      roundNo:      [], // Current round of the draft, starts at 1
-      pickNo:       [], // Current pick number within the round, starts at 1
-      nRounds:       8, // Number of rounds in the draft
-      nextPickTeam: '', // Team name that picks next
+      teamNames:    [],   // Array of strings for each team name in the draft order
+      picks:        [],   // Stores an array of Pick() objects
+      // TODO should this be in state?
+      roundNo:      [],   // Current round of the draft, starts at 1
+      // TODO should this be in state?
+      pickNo:       [],   // Current pick number within the round, starts at 1
+      nRounds:       8,   // Number of rounds in the draft
     };
+
+    // TODO should this be in state
+    this.snake = true; // Bool to toggle the type of draft
 
     this.handleNewTeam = this.handleNewTeam.bind(this);
     this.handleNewPick = this.handleNewPick.bind(this);
     this.undoPick = this.undoPick.bind(this);
+    this.onTeamMove = this.onTeamMove.bind(this);
+    this.updatePickNo = this.updatePickNo.bind(this);
+    this.getTeamNameIndex = this.getTeamNameIndex.bind(this);
   }
 
   handleNewTeam(teamName) {
-    console.log("Added new team!");
-    console.log(teamName);
-    // this.setState({
-    //   teamNames: teamName,
-    // });
     this.setState( state => {
       return state.teamNames.push(teamName);
+    });
+  }
+
+  onTeamMove(iTeamName, shiftDirection) {
+  // Shifts the team order based on the shiftDirection (1 or -1)
+  // or deletes the team if shiftDirection is 0
+    this.setState(state => {
+      // Remove element at iTeamName and re-insert at iTeamName + shiftDirection
+      const teamNames = state.teamNames.slice(0);
+
+      if (shiftDirection) {
+      // Duplicate state array since splice mutates the array
+        teamNames.splice(
+          iTeamName + shiftDirection, 0, teamNames.splice(iTeamName, 1)[0]
+        );
+      } else {
+      // If shiftDirection is 0, delete the team
+        teamNames.splice(iTeamName, 1);
+      }
+
+      return ({
+        teamNames: teamNames
+      });
     });
   }
 
@@ -64,32 +87,89 @@ export default class DraftMain extends React.Component {
       newPick.roundNo  = state.roundNo;
       newPick.pickNo   = state.pickNo;
       // newPick.overallPickNo = state.roundNo ;
-      newPick.teamName = state.nextPickTeam;
+      let iTeamName = this.getTeamNameIndex(state);
+      newPick.teamName = state.teamNames[iTeamName];
 
-      const endOfRound = state.pickNo === state.teamNames.length;
-      const roundNo    = endOfRound ? state.roundNo + 1 : state.roundNo;
-      const pickNo     = endOfRound ? 1 : state.pickNo + 1;
-
-      // Reverse the draft order for even round numbers to implement the snake draft.
-      const iPick = roundNo % 2 > 0 ? pickNo : state.teamNames.length - pickNo;
+      const {newPickNo, newRoundNo} = this.updatePickNo(state, 1);
 
       return ({
         picks:        [...state.picks, newPick],
-        roundNo:      roundNo,
-        pickNo:       pickNo,
-        nextPickTeam: state.teamNames[iPick],
+        roundNo:      newRoundNo,
+        pickNo:       newPickNo,
+        // nextPickTeam: state.teamNames[iTeamName],
       });
 
     });
   }
 
   undoPick() {
-    // TODO
-    // Revert the last pick
+  // Remove the last pick from state
+  // Decrement the current pick
+    this.setState( (state) => {
+
+      const {newPickNo, newRoundNo} = this.updatePickNo(state, -1);
+
+      return {
+        picks: state.picks.slice(0, -1),
+        roundNo: newRoundNo,
+        pickNo: newPickNo,
+      };
+    });
   }
 
+  updatePickNo(state, direction) {
+  // Utility function to calculate the next pick/round/team
+  // Handles the snake and the beginning/end of round transitions\
+  //
+  // Inputs:
+  //    state: object that contains the current component state
+  //    direction: int that's either 1 or -1 to increment or decrement the pick
+
+  // TODO make sure direction is 1 or -1 ?
+    let newRoundNo;
+    let newPickNo;
+
+    if (direction > 0) {
+      // Go forward a pick
+      const endOfRound = state.pickNo === state.teamNames.length;
+      newRoundNo = endOfRound ? state.roundNo + 1 : state.roundNo;
+      newPickNo  = endOfRound ? 1                 : state.pickNo + 1;
+    } else if (direction < 0) {
+      // Go back a pick
+      const beginningOfRound = state.pickNo === 1;
+      newRoundNo = beginningOfRound ? state.roundNo - 1      : state.roundNo;
+      newPickNo  = beginningOfRound ? state.teamNames.length : state.pickNo - 1;
+    }
+
+    return({
+      newRoundNo: newRoundNo,
+      newPickNo:  newPickNo,
+    });
+
+  }
+
+  getTeamNameIndex({roundNo, pickNo}) {
+  // Utility function to return the index of the teamname corresponding to the
+  // round and pick numbers taking into account the snake order.
+
+    let iTeamName;
+
+    // Implement the snake order
+    if (this.snake) {
+      // Reverse the draft order for even round numbers.
+      // roundNo is 1 based
+      iTeamName = (roundNo % 2) > 0 ? pickNo - 1 : this.state.teamNames.length - pickNo;
+    } else {
+      iTeamName = pickNo - 1;
+    }
+
+    return iTeamName;
+
+  }
 
   render() {
+
+    // console.log("Draftmain Render!");
 
     return (
       <>
@@ -99,6 +179,7 @@ export default class DraftMain extends React.Component {
           submitVal="Add"
           handleSubmit={this.handleNewTeam}
         />
+        <button type="button" onClick={this.undoPick}>Undo Last Pick</button>
         <DraftForm
           label="Player:"
           submitVal="Draft"
@@ -108,6 +189,7 @@ export default class DraftMain extends React.Component {
           teams={this.state.teamNames}
           picks={this.state.picks}
           nRounds={this.state.nRounds}
+          onTeamMove={this.onTeamMove}
         />
       </>
     );
@@ -130,7 +212,13 @@ function DraftTable(props) {
   // Generate column headings with the team names
   const teamsRow = props.teams.map( (teamName, ii) => {
     return (
-      <th key={ii}>{teamName}</th>
+      <TeamHeader
+        key={ii}
+        onTeamMove={props.onTeamMove}
+        // onTeamDelete={props.onTeamDelete}
+        teamName={teamName}
+        iTeamName={ii}
+      />
     );
   });
 
@@ -194,9 +282,49 @@ function DraftTable(props) {
 }
 
 
+class TeamHeader extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.onTeamDelete = this.onTeamDelete.bind(this);
+    this.onTeamMoveLeft = this.onTeamMoveLeft.bind(this);
+    this.onTeamMoveRight = this.onTeamMoveRight.bind(this);
+  }
+
+  onTeamDelete(e) {
+    e.preventDefault(); // TODO might not be necessary for regular onclick
+    this.props.onTeamMove(this.props.iTeamName, 0)
+  }
+
+  onTeamMoveRight(e) {
+    e.preventDefault();
+    this.props.onTeamMove(this.props.iTeamName, 1);
+  }
+
+  onTeamMoveLeft(e) {
+    e.preventDefault();
+    this.props.onTeamMove(this.props.iTeamName, -1);
+  }
+
+  render() {
+    return (
+      <th>
+        <button type="button" onClick={this.onTeamDelete}>x</button>
+        <button type="button" onClick={this.onTeamMoveLeft}>&lt;</button>
+        <button type="button" onClick={this.onTeamMoveRight}>&gt;</button>
+        <br/>
+        {this.props.teamName}
+      </th>
+    );
+  }
+
+
+}
+
+
+class DraftForm extends React.Component {
 // Controlled component
 // Ref: https://reactjs.org/docs/forms.html
-class DraftForm extends React.Component {
 
   constructor(props) {
     super(props);
