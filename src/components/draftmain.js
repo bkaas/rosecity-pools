@@ -1,12 +1,19 @@
 import React from "react"
+import DraftForm from "./draftForm.js"
+import AdminBar from "./adminBar.js"
+import * as styles from "../styles/draftmain.module.css"
+import * as adminStyles from "../styles/adminbar.module.css"
 
 // TODO
-// - Styling
-// - Admin password and panel
-// - Drafter password
-// - Begin draft and grey out sections that can't be used after draft start
 // - Submit draft to database
+// - Begin draft and grey out sections that can't be used after draft start
+// - Number of rounds selection
+// - Passwords
+//   - Admin password and panel
+//   - Drafter password
+// - Styling
 // - Autocomplete draft player
+// - Player logos
 
 
 
@@ -25,13 +32,14 @@ export default class DraftMain extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      teamNames:    [],   // Array of strings for each team name in the draft order
-      picks:        [],   // Stores an array of Pick() objects
+      teamNames:     [],     // Array of strings for each team name in the draft order
+      picks:         [],     // Stores an array of Pick() objects
       // TODO should this be in state?
-      roundNo:      [],   // Current round of the draft, starts at 1
+      roundNo:       [],     // Current round of the draft, starts at 1
       // TODO should this be in state?
-      pickNo:       [],   // Current pick number within the round, starts at 1
-      nRounds:       8,   // Number of rounds in the draft
+      pickNo:        [],     // Current pick number within the round, starts at 1
+      nRounds:        8,     // Number of rounds in the draft
+      isDraftStarted: false,
     };
 
     // TODO should this be in state
@@ -43,6 +51,8 @@ export default class DraftMain extends React.Component {
     this.onTeamMove = this.onTeamMove.bind(this);
     this.updatePickNo = this.updatePickNo.bind(this);
     this.getTeamNameIndex = this.getTeamNameIndex.bind(this);
+    this.onReset = this.onReset.bind(this);
+    this.onBegin = this.onBegin.bind(this);
   }
 
   handleNewTeam(teamName) {
@@ -167,44 +177,55 @@ export default class DraftMain extends React.Component {
 
   }
 
-  render() {
+  onReset() {
+    this.setState({
+      picks:         [],     // Stores an array of Pick() objects
+      // TODO should this be in state?
+      roundNo:       [],     // Current round of the draft, starts at 1
+      // TODO should this be in state?
+      pickNo:        [],     // Current pick number within the round, starts at 1
+      nRounds:        8,     // Number of rounds in the draft
+      isDraftStarted: false,
+    });
+  }
 
-    // console.log("Draftmain Render!");
+  onBegin() {
+    this.setState({
+      isDraftStarted: true,
+    });
+  }
+
+  render() {
 
     return (
       <>
         <h2>This is the draft page!</h2>
-        <DraftForm
-          label="New Team:"
-          submitVal="Add"
-          handleSubmit={this.handleNewTeam}
+        <AdminBar
+          handleNewTeam={this.handleNewTeam}
+          undoPick={this.undoPick}
+          isDraftStarted={this.state.isDraftStarted}
+          onReset={this.onReset}
+          onBegin={this.onBegin}
         />
-        <button type="button" onClick={this.undoPick}>Undo Last Pick</button>
-        <DraftForm
-          label="Player:"
-          submitVal="Draft"
-          handleSubmit={this.handleNewPick}
-        />
+        <div className={styles.draftControls}>
+          <DraftForm
+            submitVal="DRAFT"
+            defaultText="Player Name"
+            handleSubmit={this.handleNewPick}
+            isResponsive={this.state.isDraftStarted}
+          />
+        </div>
         <DraftTable
           teams={this.state.teamNames}
           picks={this.state.picks}
           nRounds={this.state.nRounds}
           onTeamMove={this.onTeamMove}
+          isDraftStarted={this.state.isDraftStarted}
         />
       </>
     );
   }
-
 }
-
-// class AdminBar extends React.Component {
-
-//   constructor(props) {
-//     super(props);
-//     this.state = {value: ""}
-//   }
-
-// }
 
 function DraftTable(props) {
   // props: teams, nRounds
@@ -218,6 +239,7 @@ function DraftTable(props) {
         // onTeamDelete={props.onTeamDelete}
         teamName={teamName}
         iTeamName={ii}
+        isDraftStarted={props.isDraftStarted}
       />
     );
   });
@@ -261,15 +283,17 @@ function DraftTable(props) {
     return (
       // TODO adjust the key? Currently round - 1 so probably ok
       <tr key={ii}>
+        <td>{ii + 1}</td> {/*Insert the round number*/}
         {draftTableRow}
       </tr>
     );
   });
 
   return (
-    <table>
+    <table className={styles.draftTable}>
       <thead>
         <tr>
+          <th>Round</th>
           {teamsRow}
         </tr>
       </thead>
@@ -307,60 +331,31 @@ class TeamHeader extends React.Component {
   }
 
   render() {
+
+    let teamButtons;
+
+    if (this.props.isDraftStarted) {
+      teamButtons = "";
+    } else {
+      teamButtons =
+        <div className={adminStyles.manageTeamButtons}>
+          <button type="button" className={adminStyles.moveArrow}
+            onClick={this.onTeamMoveLeft}>&lt;</button>
+          <button type="button" className={adminStyles.moveArrow}
+            onClick={this.onTeamMoveRight}>&gt;</button>
+          <button type="button" className={adminStyles.deleteTeamX}
+            onClick={this.onTeamDelete}>x</button>
+        </div>;
+    }
+
     return (
       <th>
-        <button type="button" onClick={this.onTeamDelete}>x</button>
-        <button type="button" onClick={this.onTeamMoveLeft}>&lt;</button>
-        <button type="button" onClick={this.onTeamMoveRight}>&gt;</button>
-        <br/>
+        {teamButtons}
         {this.props.teamName}
       </th>
     );
   }
 
-
-}
-
-
-class DraftForm extends React.Component {
-// Controlled component
-// Ref: https://reactjs.org/docs/forms.html
-
-  constructor(props) {
-    super(props);
-    this.state = {value: ""};
-
-    this.handleChange = this.handleChange.bind(this);
-    this.handleSubmitWrapper = this.handleSubmitWrapper.bind(this);
-  }
-
-  handleChange(event) {
-    this.setState({value: event.target.value});
-  }
-
-  handleSubmitWrapper(e) {
-    e.preventDefault();
-    this.props.handleSubmit(this.state.value);
-    this.setState({value: ""});
-  }
-
-  render() {
-
-    return (
-
-      // TODO adjust className, input id names etc. to be more generic
-      <form className="draftInput" onSubmit={this.handleSubmitWrapper}>
-        <label htmlFor="draftedPlayer">{this.props.label}</label>
-        <br/>
-        <input type="text" id="draftedPlayer" name="draftedPlayer"
-          value={this.state.value} onChange={this.handleChange}/>
-        <br/>
-        <input type="submit" value={this.props.submitVal}/>
-      </form>
-
-    );
-
-  }
 
 }
 

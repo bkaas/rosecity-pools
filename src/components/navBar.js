@@ -1,5 +1,5 @@
 import React from "react"
-import * as styles from "./navBar.module.css"
+import * as styles from "../styles/navBar.module.css"
 import { Link } from "gatsby"
 
 export default function NavBar() {

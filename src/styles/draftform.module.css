@@ -1,0 +1,65 @@
+/*.inputContainer {
+  width: -webkit-fit-content;
+}*/
+
+/*.inputContainer:focus {
+  border: 2px solid blue;
+}*/
+
+/*.draftform input[type=submit] {
+  padding: 5px 10px;
+  margin: 1px;
+  background-color: rgb(45, 70, 130);
+  color: #e0e0e0;
+  font-weight: bold;
+  border-radius: 4px;
+  border-color: rgb(45, 70, 130);
+  width: 6em;
+}*/
+
+/*
+Handle form spacing/layout here
+Colouring to be handled in generalStyles css module
+*/
+
+
+.draftForm input[type=submit]/*,*/
+/*.draftFormOff input[type=submit]*/
+{
+  padding: 0.45em 0.9em;
+  margin: 0.5em 0.1em;
+  width: 6em;
+}
+
+.draftForm input[type=text],
+/*.draftFormOff input[type=text],*/
+.draftForm input[list=leagues]
+ {
+  margin: 0.5em 0;
+  padding: 0.45em 0.9em ;
+  border: none;
+  border: 2px solid #d0d0d0;
+  border-radius: 4px;
+}
+
+.draftForm input[type=text]:focus,
+.draftForm input[list=leagues]:focus
+ {
+  /*outline: none;*/
+  /*border: 2px solid rgb(45, 70, 130);*/
+  /*border-color: blue;*/
+}
+
+/*.draftFormOff input[type=text] {
+  background-color: #e0e0e0;
+}*/
+
+/*.draftInput {
+  display: flex;
+  flex-flow: row wrap;
+}*/
+
+/*.formInputs {
+  display: flex;
+  flex-flow: row wrap;
+}*/

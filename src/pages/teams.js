@@ -1,7 +1,7 @@
 import React from "react"
 
 import Layout from "../components/layout.js"
-import * as styles from "../components/teams.module.css"
+import * as styles from "../styles/teams.module.css"
 
 function TeamTableEntries(props) {
 

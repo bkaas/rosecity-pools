@@ -1,0 +1,43 @@
+.draftTable {
+  border-collapse: collapse;
+  /*empty-cells: hide;*/
+  text-align: center;
+  margin: 1em;
+}
+
+.draftTable th {
+  padding: 0.2em 0.4em;
+}
+
+.draftTable th button {
+  background: none;
+  border: none;
+}
+
+.draftTable th button:hover {
+  cursor: pointer;
+}
+
+.draftTable th, .draftTable td {
+  border: 0.1em solid #909090;
+}
+
+.draftTable tr:nth-child(even) {
+  background-color: #e0f4ff;
+}
+
+.draftTable td {
+  padding: 0.2em 0.4em;
+  font-family: consolas, lucida console, courier new, monospace;
+}
+
+/* Fill empty table cells */
+/* Ref: https://stackoverflow.com/questions/42225196/prevent-collapse-of-empty-rows-in-html-table-via-css/42225797 */
+.draftTable td:empty::after {
+  content: "\00a0";
+}
+
+/* TODO rename this */
+.draftControls {
+  margin: 1em;
+}
