@@ -1,3 +1,7 @@
+.draftMain * {
+  letter-spacing: 0.5px;
+}
+
 .draftTable {
   border-collapse: collapse;
   /*empty-cells: hide;*/
@@ -28,7 +32,7 @@
 
 .draftTable td {
   padding: 0.2em 0.4em;
-  font-family: consolas, lucida console, courier new, monospace;
+  /*font-family: consolas, lucida console, courier new, monospace;*/
 }
 
 /* Fill empty table cells */
@@ -39,5 +43,9 @@
 
 /* TODO rename this */
 .draftControls {
+  margin: 1em;
+}
+
+.draftSelection {
   margin: 1em;
 }

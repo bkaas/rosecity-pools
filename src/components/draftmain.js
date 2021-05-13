@@ -1,6 +1,12 @@
 import React from "react"
 import DraftForm from "./draftForm.js"
 import AdminBar from "./adminBar.js"
+import AutoComplete from "./autocomplete.js"
+// import MyAutoComplete from "./MyAutocomplete.js"
+// import DataListInput from "react-datalist-input";
+// Docs: https://www.npmjs.com/package/react-html-datalist
+import ReactHTMLDatalist from "react-html-datalist";
+import teamIcons from "../components/teamIcons.js";
 import * as styles from "../styles/draftmain.module.css"
 import * as adminStyles from "../styles/adminbar.module.css"
 
@@ -43,11 +49,13 @@ export default class DraftMain extends React.Component {
       pickNo:        [],     // Current pick number within the round, starts at 1
       nRounds:        8,     // Number of rounds in the draft
       isDraftStarted: false,
+      playerList:     [],
     };
 
     // TODO should this be in state
     this.snake = true; // Bool to toggle the type of draft
     this.leagueName = '';
+    this.selectedPlayer = '';
 
     this.handleNewTeam = this.handleNewTeam.bind(this);
     this.handleNewPick = this.handleNewPick.bind(this);
@@ -59,6 +67,7 @@ export default class DraftMain extends React.Component {
     this.onBegin = this.onBegin.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
     this.onLeagueChange = this.onLeagueChange.bind(this);
+    this.onPlayerChange = this.onPlayerChange.bind(this);
   }
 
   handleNewTeam(teamName) {
@@ -90,9 +99,12 @@ export default class DraftMain extends React.Component {
     });
   }
 
-  handleNewPick(playerName) { // TODO should the first arg be an event?
+  handleNewPick(playerName, playerId, playerLogo) { // TODO should the first arg be an event?
     // TODO
     // figure out how to supply players to the pick form
+    console.log(playerName);
+    console.log("Player Id:");
+    console.log(playerId);
 
     const newPick = new Pick();
     newPick.playerName = playerName;
@@ -205,6 +217,12 @@ export default class DraftMain extends React.Component {
     this.leagueName = selectedLeague;
   }
 
+  onPlayerChange(e) {
+    console.log(e.target.value);
+    console.log(e.target.text);
+    this.selectedPlayer = e;
+  }
+
   onSubmit() {
   // Send draft results to backend
 
@@ -232,10 +250,41 @@ export default class DraftMain extends React.Component {
 
   }
 
+  componentDidMount() {
+  // Get player list from database for autocomplete
+
+    fetch("/api/players")
+      .then(res => res.json())
+      .then(data => {
+        // console.log(data);
+        const playerList = data.map( ({firstname, lastname, logo, playerid}) => {
+
+          let logoComponent;
+          if (logo) {
+            logoComponent = teamIcons[logo.slice(0, -4)];
+          } else {
+            logoComponent = '';
+          }
+
+          return ({
+            name: firstname + " " + lastname,
+            logo: logoComponent,
+            playerid: playerid,
+          });
+        });
+
+        this.setState({ playerList: playerList });
+      })
+      .catch(error => {
+        console.log("Error getting players:", error)
+      });
+
+  }
+
   render() {
 
     return (
-      <>
+      <div className={styles.draftMain}>
         <h2>This is the draft page!</h2>
         <AdminBar
           handleNewTeam={this.handleNewTeam}
@@ -246,12 +295,11 @@ export default class DraftMain extends React.Component {
           onSubmit={this.onSubmit}
           onLeagueChange={this.onLeagueChange}
         />
-        <div className={styles.draftControls}>
-          <DraftForm
-            submitVal="DRAFT"
-            defaultText="Player Name"
+        <div className={styles.draftSelection}>
+          <AutoComplete
+            suggestions={this.state.playerList}
             handleSubmit={this.handleNewPick}
-            isResponsive={this.state.isDraftStarted}
+            isDraftStarted={this.state.isDraftStarted}
           />
         </div>
         <DraftTable
@@ -261,7 +309,7 @@ export default class DraftMain extends React.Component {
           onTeamMove={this.onTeamMove}
           isDraftStarted={this.state.isDraftStarted}
         />
-      </>
+      </div>
     );
   }
 }
