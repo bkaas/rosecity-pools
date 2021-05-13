@@ -1,0 +1,28 @@
+.textInput {
+  position: relative;
+}
+
+.suggestions {
+  position: absolute;
+  list-style-type: none;
+  background-color: white;
+  border: 2px solid black;
+  border-radius: 0.2em;
+  padding: 0;
+  margin: 0;
+}
+
+.suggestions li {
+  margin: 0.5em;
+  border-bottom: 2px solid black;
+  text-transform: capitalize;
+}
+
+.suggestions svg {
+  width: 2em;
+  vertical-align: top;
+}
+
+.suggestionActive {
+  background-color: #c0c0c0;
+}

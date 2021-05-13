@@ -1,0 +1,23 @@
+.loginForm {
+  display: flex;
+  flex-flow: column wrap;
+  position: absolute;
+  top: 30vh;
+  left: 50vw;
+  transform: translate(-50%, -50%);
+  align-items: center;
+}
+
+.loginForm * {
+  display: block;
+  margin: 0.5em;
+  padding: 0.2em;
+}
+
+.loginForm input[type=password] {
+  padding: 0.5em;
+}
+
+.loginForm input[type=submit] {
+  width: 5em;
+}

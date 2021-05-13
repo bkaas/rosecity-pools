@@ -4,6 +4,8 @@ import React from "react"
 import { navigate } from "gatsby"
 import { handleLogin, isLoggedIn } from "../services/auth"
 
+import * as styles from "../styles/login.module.css"
+
 export default class Login extends React.Component {
 
   constructor(props) {
@@ -31,32 +33,29 @@ export default class Login extends React.Component {
   }
 
   render() {
+    console.log("Login component render.")
+
     if (isLoggedIn()) {
       navigate(this.route)
     }
 
     return (
       <>
-        <h1>Log in</h1>
         <form
+          className={styles.loginForm}
           method="post"
           onSubmit={event => {
             this.handleSubmit(event)
             navigate(this.route)
           }}
         >
-          <label>
-            Username
-            <input type="text" name="username" onChange={this.handleUpdate} />
-          </label>
-          <label>
-            Password
-            <input
-              type="password"
-              name="password"
-              onChange={this.handleUpdate}
-            />
-          </label>
+          <label for="password">Enter draft password</label>
+          <input
+            type="password"
+            name="password"
+            id="password"
+            onChange={this.handleUpdate}
+          />
           <input type="submit" value="Log In" />
         </form>
       </>

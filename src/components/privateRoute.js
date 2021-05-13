@@ -5,6 +5,10 @@ import { navigate } from "gatsby"
 import { isLoggedIn } from "../services/auth"
 
 export default function PrivateRoute({ component: Component, location, ...rest }) {
+
+  console.log("Private Route function.")
+  console.log(location.pathname)
+
   if (!isLoggedIn() && location.pathname !== `/draft/login`) {
     navigate("/draft/login")
     return null

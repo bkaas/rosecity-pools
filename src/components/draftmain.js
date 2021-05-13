@@ -6,6 +6,8 @@ import teamIcons from "../components/teamIcons.js";
 import * as styles from "../styles/draftmain.module.css"
 import * as adminStyles from "../styles/adminbar.module.css"
 
+import { isAdmin } from "../services/auth.js"
+
 // TODO
 // - Submit draft to database
 // - Number of rounds selection
@@ -63,7 +65,6 @@ export default class DraftMain extends React.Component {
     this.onBegin = this.onBegin.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
     this.onLeagueChange = this.onLeagueChange.bind(this);
-    this.onPlayerChange = this.onPlayerChange.bind(this);
   }
 
   handleNewTeam(teamName) {
@@ -98,9 +99,6 @@ export default class DraftMain extends React.Component {
   handleNewPick(playerName, playerId, playerLogo) { // TODO should the first arg be an event?
     // TODO
     // figure out how to supply players to the pick form
-    console.log(playerName);
-    console.log("Player Id:");
-    console.log(playerId);
 
     const newPick = new Pick();
     newPick.playerName = playerName;
@@ -213,16 +211,10 @@ export default class DraftMain extends React.Component {
     this.leagueName = selectedLeague;
   }
 
-  onPlayerChange(e) {
-    console.log(e.target.value);
-    console.log(e.target.text);
-    this.selectedPlayer = e;
-  }
-
   onSubmit() {
   // Send draft results to backend
 
-    console.log('Clicked submit');
+    // console.log('Clicked submit');
 
     const data = {
       picks: this.state.picks,
@@ -279,9 +271,10 @@ export default class DraftMain extends React.Component {
 
   render() {
 
-    return (
-      <div className={styles.draftMain}>
-        <h2>This is the draft page!</h2>
+    // Only render the admin bar if the user is an admin
+    let adminBar;
+    if (isAdmin()) {
+      adminBar =
         <AdminBar
           handleNewTeam={this.handleNewTeam}
           undoPick={this.undoPick}
@@ -291,6 +284,14 @@ export default class DraftMain extends React.Component {
           onSubmit={this.onSubmit}
           onLeagueChange={this.onLeagueChange}
         />
+    }
+    else {
+      adminBar = "";
+    }
+
+    return (
+      <div className={styles.draftMain}>
+        {adminBar}
         <div className={styles.draftSelection}>
           <AutoComplete
             suggestions={this.state.playerList}
