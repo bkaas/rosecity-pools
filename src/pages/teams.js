@@ -1,6 +1,7 @@
 import React from "react"
 
 import Layout from "../components/layout.js"
+import teamIcons from "../components/teamIcons.js"
 import * as styles from "../styles/teams.module.css"
 
 function TeamTableEntries(props) {
@@ -16,11 +17,22 @@ function TeamTableEntries(props) {
     props.stats.map( (stats, ii) => {
       const playername = (stats.firstname + ' ' + stats.lastname).toLowerCase();
 
+      let logo;
+      if (stats.logo) {
+        logo = teamIcons[stats.logo.slice(0, -4)];
+      } else {
+        logo = '';
+      }
+
       return(
         <tr key={ii}>
-          <td dangerouslySetInnerHTML={{__html: stats.logo}}/>
+          {/*<td dangerouslySetInnerHTML={{__html: stats.logo}}/>*/}
           {/*TODO: Setting the names to lowercase here so I can capitalize in css*/}
-          <td>{playername}</td>
+          <td>{logo}</td>
+          <td>
+            {/*{teamIcons.newyorki}*/}
+            {playername}
+          </td>
           <td>{stats.points}</td>
         </tr>
       );
@@ -33,7 +45,7 @@ function TeamTable(props) {
     <table>
       <tbody>
         <tr>
-          <th>Logos</th>
+          <th>&#160;</th>
           <th>Player</th>
           <th>Pts</th>
         </tr>

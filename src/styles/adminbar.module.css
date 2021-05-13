@@ -18,12 +18,18 @@
 }
 
 .adminContents button {
-  margin: 1em 0;
+  margin: 0.5em;
   padding: 0.4em 0.8em;
 }
 
-.manageTeamButtons {
+.draftControls {
+  display: flex;
+  flex-flow: row wrap;
+  max-width: 20em;
+}
 
+.draftControls button {
+  flex: 1 1 1em; /* TODO better understand this */
 }
 
 .deleteTeamX {

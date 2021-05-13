@@ -21,6 +21,8 @@ export default function AdminBar(props) {
       <div className={styles.adminContents}>
         <LeagueSelection
           isResponsive={!props.isDraftStarted}
+          leagues={props.leagues}
+          onLeagueChange={props.onLeagueChange}
         />
         <DraftForm
           submitVal="ADD"
@@ -29,34 +31,38 @@ export default function AdminBar(props) {
           isResponsive={!props.isDraftStarted}
         />
         <h3>Draft Controls</h3>
-        <button
-          className={notButtonStyle}
-          type="button"
-          onClick={props.onBegin}
-          disabled={props.isDraftStarted}>
-          Begin Draft
-        </button>
-        <button
-          className={generalStyles.draftButton /* Always enabled */}
-          type="button"
-          onClick={props.onReset}>
-          Reset Draft
-        </button>
-        <br/>
-        <button
-          className={buttonStyle}
-          type="button"
-          onClick={props.undoPick}
-          disabled={!props.isDraftStarted}>
-          Undo Pick
-        </button>
-        <br/>
-        <button
-          className={buttonStyle}
-          type="button"
-          disabled={!props.isDraftStarted}>
-          Submit Draft
-        </button>
+        <div className={styles.draftControls}>
+          <button
+            className={notButtonStyle}
+            type="button"
+            onClick={props.onBegin}
+            disabled={props.isDraftStarted}>
+            Begin Draft
+          </button>
+          <button
+            className={buttonStyle}
+            type="button"
+            onClick={props.onReset}
+            disabled={!props.isDraftStarted}>
+            Configure Draft
+          </button>
+        </div>
+        <div className={styles.draftControls}>
+          <button
+            className={buttonStyle}
+            type="button"
+            onClick={props.undoPick}
+            disabled={!props.isDraftStarted}>
+            Undo Pick
+          </button>
+          <button
+            className={buttonStyle}
+            type="button"
+            disabled={!props.isDraftStarted}
+            onClick={props.onSubmit}>
+            Submit Draft
+          </button>
+        </div>
       </div>
     </div>
   );

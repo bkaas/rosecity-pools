@@ -6,14 +6,17 @@ import * as adminStyles from "../styles/adminbar.module.css"
 
 // TODO
 // - Submit draft to database
-// - Begin draft and grey out sections that can't be used after draft start
 // - Number of rounds selection
 // - Passwords
 //   - Admin password and panel
 //   - Drafter password
-// - Styling
 // - Autocomplete draft player
+// - Styling
 // - Player logos
+// - View teams:
+//    - Select League
+//    - Select Year
+// - Handle a team that already drafted
 
 
 
@@ -44,6 +47,7 @@ export default class DraftMain extends React.Component {
 
     // TODO should this be in state
     this.snake = true; // Bool to toggle the type of draft
+    this.leagueName = '';
 
     this.handleNewTeam = this.handleNewTeam.bind(this);
     this.handleNewPick = this.handleNewPick.bind(this);
@@ -53,6 +57,8 @@ export default class DraftMain extends React.Component {
     this.getTeamNameIndex = this.getTeamNameIndex.bind(this);
     this.onReset = this.onReset.bind(this);
     this.onBegin = this.onBegin.bind(this);
+    this.onSubmit = this.onSubmit.bind(this);
+    this.onLeagueChange = this.onLeagueChange.bind(this);
   }
 
   handleNewTeam(teamName) {
@@ -184,7 +190,6 @@ export default class DraftMain extends React.Component {
       roundNo:       [],     // Current round of the draft, starts at 1
       // TODO should this be in state?
       pickNo:        [],     // Current pick number within the round, starts at 1
-      nRounds:        8,     // Number of rounds in the draft
       isDraftStarted: false,
     });
   }
@@ -193,6 +198,38 @@ export default class DraftMain extends React.Component {
     this.setState({
       isDraftStarted: true,
     });
+  }
+
+  onLeagueChange(selectedLeague) {
+    // No need to re-render, just store new value in a property
+    this.leagueName = selectedLeague;
+  }
+
+  onSubmit() {
+  // Send draft results to backend
+
+    console.log('Clicked submit');
+
+    const data = {
+      picks: this.state.picks,
+      league: this.leagueName,
+    }
+
+    fetch('/api/draftResults', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    })
+    .then(response => response.json())
+    .then(data => {
+      console.log('Success:', data);
+    })
+    .catch((error) => {
+      console.error('Error:', error);
+    });
+
   }
 
   render() {
@@ -206,6 +243,8 @@ export default class DraftMain extends React.Component {
           isDraftStarted={this.state.isDraftStarted}
           onReset={this.onReset}
           onBegin={this.onBegin}
+          onSubmit={this.onSubmit}
+          onLeagueChange={this.onLeagueChange}
         />
         <div className={styles.draftControls}>
           <DraftForm
@@ -283,7 +322,7 @@ function DraftTable(props) {
     return (
       // TODO adjust the key? Currently round - 1 so probably ok
       <tr key={ii}>
-        <td>{ii + 1}</td> {/*Insert the round number*/}
+        <td>{ii + 1}</td>
         {draftTableRow}
       </tr>
     );

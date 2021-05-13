@@ -16,6 +16,7 @@ export default class LeagueSelection extends React.Component {
   }
 
   handleChange(event) {
+    this.props.onLeagueChange(event.target.value);
     this.setState({selectedLeague: event.target.value});
   }
 
@@ -30,13 +31,17 @@ export default class LeagueSelection extends React.Component {
         this.setState({
           leagues: leagues,
         });
+      })
+      .catch( error => {
+        console.log("Did not get league names from database.")
+        console.log(error);
       });
 
   }
 
   render() {
 
-    console.log(this.state.leagues);
+    // console.log(this.state.leagues);
 
     const leagueOptions = this.state.leagues.map( league => {
       return (
@@ -47,7 +52,7 @@ export default class LeagueSelection extends React.Component {
     const inputStyle = this.props.isResponsive ? generalStyles.draftText : generalStyles.draftTextOff;
 
     return (
-      <form action="" className={styles.draftForm}>{/* TODO handle the action */}
+      <div className={styles.draftForm}>
         <input
           className={inputStyle}
           list="leagues"
@@ -61,7 +66,7 @@ export default class LeagueSelection extends React.Component {
         <datalist id="leagues">
           {leagueOptions}
         </datalist>
-      </form>
+      </div>
     );
 
   }
