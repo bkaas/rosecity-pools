@@ -2,10 +2,6 @@ import React from "react"
 import DraftForm from "./draftForm.js"
 import AdminBar from "./adminBar.js"
 import AutoComplete from "./autocomplete.js"
-// import MyAutoComplete from "./MyAutocomplete.js"
-// import DataListInput from "react-datalist-input";
-// Docs: https://www.npmjs.com/package/react-html-datalist
-import ReactHTMLDatalist from "react-html-datalist";
 import teamIcons from "../components/teamIcons.js";
 import * as styles from "../styles/draftmain.module.css"
 import * as adminStyles from "../styles/adminbar.module.css"
