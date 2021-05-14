@@ -39,3 +39,11 @@
 .moveArrow {
   color: blue;
 }
+
+.nRounds {
+  margin: 0.2em;
+}
+
+.nRounds input {
+  width: 4em;
+}

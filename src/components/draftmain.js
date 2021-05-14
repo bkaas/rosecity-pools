@@ -10,13 +10,8 @@ import { isAdmin } from "../services/auth.js"
 
 // TODO
 // - Submit draft to database
-// - Number of rounds selection
-// - Passwords
-//   - Admin password and panel
-//   - Drafter password
-// - Autocomplete draft player
-// - Styling
-// - Player logos
+// - Passwords: more secure
+// - Player logos in draft table
 // - View teams:
 //    - Select League
 //    - Select Year
@@ -65,6 +60,7 @@ export default class DraftMain extends React.Component {
     this.onBegin = this.onBegin.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
     this.onLeagueChange = this.onLeagueChange.bind(this);
+    this.onNumRoundsChange = this.onNumRoundsChange.bind(this);
   }
 
   handleNewTeam(teamName) {
@@ -101,16 +97,21 @@ export default class DraftMain extends React.Component {
     // figure out how to supply players to the pick form
 
     const newPick = new Pick();
+    // console.log(newPick);
     newPick.playerName = playerName;
-      // newPick.playerid = ;
-      // newPick.playerLogo = ;
+    newPick.playerid   = playerId;
+    newPick.playerLogo = playerLogo;
+    // console.log(newPick);
 
     this.setState( (state) => {
       newPick.roundNo  = state.roundNo;
       newPick.pickNo   = state.pickNo;
-      // newPick.overallPickNo = state.roundNo ;
       let iTeamName = this.getTeamNameIndex(state);
       newPick.teamName = state.teamNames[iTeamName];
+
+      // console.log(state.teamNames);
+      // console.log(iTeamName);
+      // console.log(newPick);
 
       const {newPickNo, newRoundNo} = this.updatePickNo(state, 1);
 
@@ -203,12 +204,20 @@ export default class DraftMain extends React.Component {
   onBegin() {
     this.setState({
       isDraftStarted: true,
+      roundNo: 1,
+      pickNo: 1,
     });
   }
 
   onLeagueChange(selectedLeague) {
     // No need to re-render, just store new value in a property
     this.leagueName = selectedLeague;
+  }
+
+  onNumRoundsChange(e) {
+    this.setState({
+      nRounds: e.target.value,
+    });
   }
 
   onSubmit() {
@@ -219,6 +228,7 @@ export default class DraftMain extends React.Component {
     const data = {
       picks: this.state.picks,
       league: this.leagueName,
+      year: new Date().getFullYear(),
     }
 
     fetch('/api/draftResults', {
@@ -283,6 +293,8 @@ export default class DraftMain extends React.Component {
           onBegin={this.onBegin}
           onSubmit={this.onSubmit}
           onLeagueChange={this.onLeagueChange}
+          nRounds={this.state.nRounds}
+          onNumRoundsChange={this.onNumRoundsChange}
         />
     }
     else {

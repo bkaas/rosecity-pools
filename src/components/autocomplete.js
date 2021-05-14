@@ -17,10 +17,11 @@ export default class AutoComplete extends React.Component {
       showSuggestions:      false,
       typedInput:           "", // contains the user typed input
       suggestedInput:       "", // contains the selected input
-      selectedPlayer:       0,
+      selectedPlayer:       0,  //selected  PLayer id
     };
 
     this.numSuggestions = 10;
+    this.selectedLogo = "";
 
     this.onChange = this.onChange.bind(this);
     this.onClick = this.onClick.bind(this);
@@ -53,13 +54,14 @@ export default class AutoComplete extends React.Component {
       suggestedInput:       e.currentTarget.innerText,
       selectedPlayer:       e.currentTarget.getAttribute("playerid"),
     });
+    this.selectedLogo = e.currentTarget.getAttribute("playerlogo");
   }
 
   handleSubmitWrapper(e) {
     console.log("form submitted");
     e.preventDefault();
     const playerName = this.state.suggestedInput ? this.state.suggestedInput : this.state.typedInput;
-    this.props.handleSubmit(playerName, this.state.selectedPlayer);
+    this.props.handleSubmit(playerName, this.state.selectedPlayer, this.selectedLogo);
 
     // Clear state
     this.setState({
@@ -93,6 +95,8 @@ export default class AutoComplete extends React.Component {
           suggestedInput:   filteredSuggestions[activeSuggestion].name,
           selectedPlayer:   filteredSuggestions[activeSuggestion].playerid,
         });
+
+        this.selectedLogo = filteredSuggestions[activeSuggestion].logo;
       }
 
     }
@@ -216,6 +220,7 @@ export default class AutoComplete extends React.Component {
                   className={className}
                   key={index}
                   playerid={suggestion.playerid}
+                  playerlogo={suggestion.logo}
                   onClick={onClick}
                 >
                   {suggestion.logo}{suggestion.name}

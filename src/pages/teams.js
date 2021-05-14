@@ -93,7 +93,7 @@ export default class TeamGrid extends React.Component {
 
       })
       .then(data => {
-        // console.log(data);
+        console.log(data);
         // console.log(data[0]);
         // console.log(this.state.team[0]);
 
@@ -105,16 +105,24 @@ export default class TeamGrid extends React.Component {
 
   render() {
     // console.log('this.state.team');
-    // console.log(this.state.team);
-    if (this.state.team[0].stats.length === 1) {
-      return null;
+    console.log(this.state.team);
+    let teams;
+    if (!this.state.team.length) {
+      teams = <p>No data for this league and year</p>;
     }
+    else {
 
-    const teams = this.state.team.map( (team, ii) => {
-      return (
-        <Team key={ii} teamData={team} />
-      );
-    });
+      if (this.state.team[0].stats.length === 1) {
+        return null;
+      }
+
+      teams = this.state.team.map( (team, ii) => {
+        return (
+          <Team key={ii} teamData={team} />
+        );
+      });
+
+    }
 
     return (
       <Layout>

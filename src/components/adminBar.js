@@ -30,7 +30,16 @@ export default function AdminBar(props) {
           handleSubmit={props.handleNewTeam}
           isResponsive={!props.isDraftStarted}
         />
-        <h3>Draft Controls</h3>
+        <div className={styles.nRounds}>
+          <label htmlFor="numRounds">Rounds: </label>
+          <input
+            type="number"
+            id="numRounds"
+            name="numRounds"
+            value={props.nRounds}
+            onChange={props.onNumRoundsChange}/>
+        </div>
+        {/*<h3>Draft Controls</h3>*/}
         <div className={styles.draftControls}>
           <button
             className={notButtonStyle}
