@@ -3,7 +3,7 @@ import { Router } from "@reach/router"
 import Layout from "../components/layout.js"
 import DraftMain from "../components/draftmain.js"
 import Login from "../components/login.js"
-import PrivateRoute from "../components/PrivateRoute"
+import PrivateRoute from "../components/privateRoute.js"
 
 export default function Draft() {
 
