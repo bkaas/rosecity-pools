@@ -38,7 +38,7 @@ export default class AutoComplete extends React.Component {
     );
 
     this.setState({
-      activeSuggestion:     -1,
+      activeSuggestion:     0,
       filteredSuggestions,
       showSuggestions:      true,
       typedInput:           e.currentTarget.value,
