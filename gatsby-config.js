@@ -22,7 +22,8 @@ module.exports = {
   ],
   proxy: {
     prefix: "/api",
-    url: "http://localhost:3000",
+    // url: "http://localhost:3000",
+    url: "https://rosecitypools.info/",
   },
   // Ref: https://www.gatsbyjs.com/plugins/gatsby-plugin-create-client-paths/
 }
