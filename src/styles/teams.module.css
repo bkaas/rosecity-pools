@@ -1,4 +1,5 @@
 .teamGrid {
+  flex: 1 1 80%;
   display: flex;
   flex-flow: row wrap;
 }
@@ -49,4 +50,27 @@ h3 {
   margin: 0.4em;
   padding: 0;
   color: #404040;
+}
+
+.tableHeader {
+  display: flex;
+  flex-flow: row wrap;
+}
+
+.tableHeaderPts {
+  flex: 1 1em;
+  text-align: right;
+}
+
+.teamsPageContainer {
+  display: flex;
+  flex-flow: row;
+}
+
+.standingsPane {
+  flex: 1 1 10%;
+  position: sticky;
+  top: 4em;
+  align-self: flex-start;
+  /*background-color: black;*/
 }

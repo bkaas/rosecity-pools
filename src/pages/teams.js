@@ -18,10 +18,15 @@ function TeamTableEntries(props) {
       const playername = (stats.firstname + ' ' + stats.lastname).toLowerCase();
 
       let logo;
-      if (stats.logo) {
-        logo = teamIcons[stats.logo.slice(0, -4)];
-      } else {
-        logo = '';
+      if (props.teamType) {
+        logo = ii + 1;
+      }
+      else {
+        if (stats.logo) {
+          logo = teamIcons[stats.logo.slice(0, -4)];
+        } else {
+          logo = '';
+        }
       }
 
       return(
@@ -41,26 +46,52 @@ function TeamTableEntries(props) {
 }
 
 function TeamTable(props) {
+
+  let headings;
+  if (props.teamType) {
+    headings = ["", "", ""];
+  }
+  else {
+    headings = ["", "Player", "Pts"];
+  }
+
+  const htmlHeadings = headings.map( (heading, ii) => <th key={ii}>{heading}</th> );
+
   return (
     <table>
       <tbody>
         <tr>
-          <th>&#160;</th>
-          <th>Player</th>
-          <th>Pts</th>
+          {htmlHeadings}
         </tr>
-        <TeamTableEntries stats={props.stats} />
+        <TeamTableEntries stats={props.stats} teamType={props.teamType}/>
       </tbody>
     </table>
   );
 }
 
 function Team(props) {
+
+  let totalPoints;
+  let totalPointsElement;
+  if (!props.teamType) {
+    totalPoints = props.teamData.stats.reduce((sum, stat) => {
+      return sum + stat.points;
+    }, 0);
+
+    totalPointsElement = <h3 className={styles.tableHeaderPts}>{totalPoints}</h3>;
+  }
+  else {
+    totalPointsElement = '';
+  }
+
   return (
     <div className={styles.teamContainer}>
       <div className={styles.teamBackground}>
-        <h3>{props.teamData.name}</h3>
-        <TeamTable stats={props.teamData.stats} />
+        <div className={styles.tableHeader}>
+          <h3>{props.teamData.name}</h3>
+          {totalPointsElement}
+        </div>
+        <TeamTable stats={props.teamData.stats} teamType={props.teamType}/>
       </div>
     </div>
   );
@@ -81,6 +112,8 @@ export default class TeamGrid extends React.Component {
         }],
       }],
     };
+
+    this.assembleStandingsData = this.assembleStandingsData.bind(this);
   }
 
   componentDidMount() {
@@ -101,6 +134,38 @@ export default class TeamGrid extends React.Component {
           team: data,
         })
       })
+  }
+
+  assembleStandingsData() {
+  // Create object that is similar to the "state" object in structure
+  // Pass the object into the Team component for standings
+  // The "name" of the team will be "Standings"
+  // The stats will be each team name and their total points
+
+
+    const standingsData = this.state.team.map( team => {
+
+      const teamTotalPoints = team.stats.reduce((sum, stat) => {
+        return sum + stat.points;
+      }, 0);
+
+      return ({
+        firstname: team.name,
+        lastname:  "",
+        points:    teamTotalPoints,
+        logo:      false,
+      });
+    });
+
+    standingsData.sort((a, b) => {
+      return b.points - a.points;
+    });
+
+    return ({
+      name: "Standings",
+      stats: standingsData,
+    });
+
   }
 
   render() {
@@ -124,11 +189,19 @@ export default class TeamGrid extends React.Component {
 
     }
 
+    // Create standings table
+    const standingsData = this.assembleStandingsData();
+    console.log(standingsData);
+
     return (
       <Layout>
-        <h1>Teams Page!</h1>
-        <div className={styles.teamGrid}>
-          {teams}
+        <div className={styles.teamsPageContainer}>
+          <div className={styles.standingsPane}>
+            <Team teamData={standingsData} teamType="standings"/>
+          </div>
+          <div className={styles.teamGrid}>
+            {teams}
+          </div>
         </div>
       </Layout>
     );
