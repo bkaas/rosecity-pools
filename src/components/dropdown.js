@@ -5,7 +5,7 @@ export default class Dropdown extends React.Component {
     super(props);
     this.state = {
       options: props.options,
-      selectedOption: '',
+      selectedOption: this.props.initialSelect,
     };
     this.onSelect = this.onSelect.bind(this);
   }

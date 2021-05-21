@@ -112,9 +112,10 @@ export default class TeamGrid extends React.Component {
           firstname: '',
           points: '',
           logo: '',
+          pick: '', // added for sorting teams by draft position
         }],
       }],
-      sortIndex: 0, // Default to alphabetical (for now)
+      sortIndex: 1, // Default to draft order sort
     };
 
     // this.sortOptions = ['Alphabetical', 'Draft Order', 'Standings'];
@@ -134,14 +135,14 @@ export default class TeamGrid extends React.Component {
 
       })
       .then(data => {
-        console.log(data);
-        // console.log(data[0]);
-        // console.log(this.state.team[0]);
-
         this.setState({
           team: data,
         })
-      })
+
+        // Sort the teams when they first mount
+        this.onSortSelect(this.sortOptions[this.state.sortIndex]);
+      });
+
   }
 
   assembleStandingsData() {
@@ -190,7 +191,9 @@ export default class TeamGrid extends React.Component {
         };
         break;
       case 1: // Draft Order
-        // TODO
+        sortCallback = (teamA, teamB) => {
+          return teamA.stats[0].pick - teamB.stats[0].pick; // Subtract the first round pick numbers
+        };
         break;
       case 2: // Standings
       default:
@@ -219,7 +222,7 @@ export default class TeamGrid extends React.Component {
 
     // TODO revisit this block
     // console.log('this.state.team');
-    console.log(this.state.team);
+    // console.log(this.state.team);
     let teams;
     if (!this.state.team.length) {
       teams = <p>No data for this league and year</p>;
@@ -264,6 +267,7 @@ export default class TeamGrid extends React.Component {
                 selectName="sortBy"
                 options={this.sortOptions}
                 onSelect={this.onSortSelect}
+                initialSelect={this.sortOptions[this.state.sortIndex]}
               />
             </div>
             <div className={styles.teamGrid}>
