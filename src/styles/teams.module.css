@@ -52,6 +52,10 @@
   margin: 0.5em;
 }
 
+.standingsContainer {
+  background-color: white;
+}
+
 .teamBackground {
   padding: 0.5em 0.5em 1.5em;
   margin: 0.5em;
@@ -109,19 +113,12 @@ h3 {
 
 .standingsBar button {
   border: none;
-  flex: 1 1 15em;
+  flex: 1 1 100%;
   height: 2em;
   font-size: 1em;
   text-transform: uppercase;
 }
 
-.standingsBar:active + .standingsDropdown {
-  display: block;
-  position: fixed;
-  left: 50%;
-  transform: translate(-50%, 0);
-  color: red;
-}
 
 @media only screen and (max-width: 768px) {
   .standingsPane {
@@ -135,5 +132,12 @@ h3 {
     z-index: 1;
   }
 
+  .standingsDropdown.visible {
+    display: block;
+    position: fixed;
+    left: 50%;
+    transform: translate(-50%, 0);
+    color: red;
+  }
 
 }

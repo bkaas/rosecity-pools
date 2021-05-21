@@ -116,6 +116,7 @@ export default class TeamGrid extends React.Component {
         }],
       }],
       sortIndex: 1, // Default to draft order sort
+      isStandingsDropdownVisible: false,
     };
 
     // this.sortOptions = ['Alphabetical', 'Draft Order', 'Standings'];
@@ -123,6 +124,7 @@ export default class TeamGrid extends React.Component {
 
     this.assembleStandingsData = this.assembleStandingsData.bind(this);
     this.onSortSelect = this.onSortSelect.bind(this);
+    this.onStandingsDropdownClick = this.onStandingsDropdownClick.bind(this);
   }
 
   componentDidMount() {
@@ -211,6 +213,14 @@ export default class TeamGrid extends React.Component {
     });
   }
 
+  onStandingsDropdownClick() {
+    this.setState((state) => {
+      return ({
+        isStandingsDropdownVisible: !state.isStandingsDropdownVisible,
+      });
+    });
+  }
+
   render() {
 
     // Create standings table
@@ -241,13 +251,17 @@ export default class TeamGrid extends React.Component {
 
     }
 
+    const standingsDropdownClass = this.state.isStandingsDropdownVisible ?
+      `${styles.standingsDropdown} ${styles.visible}` : styles.standingsDropdown;
 
     return (
       <Layout>
         <div className={styles.standingsBar}>
-          <button>Standings</button>{/* TODO This probably doesn't need to be a button */}
+          <button onClick={this.onStandingsDropdownClick}>
+            Standings
+          </button>
         </div>
-        <div className={styles.standingsDropdown}>
+        <div className={standingsDropdownClass}>
           <Team
             teamData={standingsData}
             teamType="standings"
