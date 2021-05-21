@@ -1,40 +1,37 @@
 * {
   margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
 .navbar {
   background-color: rgb(45, 70, 130);
   position: sticky;
   top: 0;
-  /*margin: 1em;*/
+  z-index: 1;
+  height: 3em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .navbar ul {
-  /*width: 80%;*/
   display: flex;
-  /*border: 2px solid black;*/
   flex-flow: row wrap;
   justify-content: center;
-  /*align-items: center;*/
-  /*margin: 1em;*/
+  align-items: center;
+  width: 100%;
 }
 
 .navbar li {
   list-style: none;
-  margin: 1em;
-  /*padding: 1em 3em 0em;*/
-  /*padding: 1em 3em ;*/
+  margin: 0 5%;
 }
 
 .navbar a {
   flex: 1 4em;
-  /*border: 2px solid red;*/
-  padding: 0.4em;
-  margin: 0.2em;
   text-align: center;
   color: #e0e0e0;
-  /*font-family: "Segoe UI",Arial,sans-serif;*/
-  font-size: 17px;
   font-weight: 600;
   text-transform: uppercase;
   text-decoration: none;

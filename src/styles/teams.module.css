@@ -1,5 +1,45 @@
+/* {
+  box-sizing: border-box;
+  margin: 0;
+}*/
+
+/* Everything under the header */
+.teamsMain {
+  display: flex;
+  flex-flow: row nowrap;
+  /*position: relative;*/ /* maybe? */
+}
+
+/* Left side standings */
+.standingsPane {
+  flex: 0 1 15em;
+  position: sticky;
+  top: 3em; /* (navbar link: 0.4em * 2) + (navbar list: 1em * 2) + */
+  align-self: flex-start;
+}
+
+/* Everything to the right of the standings (teams and sort bar) */
+.teamsPane {
+  flex: 1 1 calc(100% - 15em);
+}
+
+.sortBar {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  height: 3em;
+  margin: 0 5%;
+}
+
+.sortBar * {
+  margin: 0 0.5em;
+}
+
+.sortBar select {
+  padding: 0.25em;
+}
+
 .teamGrid {
-  flex: 1 1 80%;
   display: flex;
   flex-flow: row wrap;
 }
@@ -7,7 +47,6 @@
 .teamContainer {
   flex: 1 250px;
   border: 2px solid #e0e0e0;
-  /*padding: 1em;*/
   border-radius: 1em;
   overflow: auto;
   margin: 0.5em;
@@ -23,13 +62,11 @@
 
 .teamContainer table {
   border-collapse: collapse;
-  /*border: 2px solid red;*/
   margin: auto;
   table-layout: auto;
 }
 
 .teamContainer th, .teamContainer td {
-  /*border: 2px solid red;*/
   border-bottom: 1px solid;
   /*font-family: consolas, lucida console, courier new, monospace;*/
   color: #808080;
@@ -39,7 +76,6 @@
   padding: 0.2em 1em;
   font-style: italic;
   text-transform: capitalize;
-  /*vertical-align: top;*/
 }
 
 .teamContainer svg {
@@ -62,15 +98,42 @@ h3 {
   text-align: right;
 }
 
-.teamsPageContainer {
-  display: flex;
-  flex-flow: row;
+.standingsBar, .standingsDropdown {
+  display: none;
 }
 
-.standingsPane {
-  flex: 1 1 10%;
-  position: sticky;
-  top: 4em;
-  align-self: flex-start;
-  /*background-color: black;*/
+.standingsBar, .standingsBar * {
+  background-color: rgb(105, 140, 200);
+}
+
+
+.standingsBar button {
+  border: none;
+  flex: 1 1 15em;
+  height: 2em;
+  font-size: 1em;
+  text-transform: uppercase;
+}
+
+.standingsBar:active + .standingsDropdown {
+  display: block;
+  position: fixed;
+  left: 50%;
+  transform: translate(-50%, 0);
+  color: red;
+}
+
+@media only screen and (max-width: 768px) {
+  .standingsPane {
+    display: none;
+  }
+
+  .standingsBar {
+    position: sticky;
+    top: 3em; /* navbar height: 3em */
+    display: flex;
+    z-index: 1;
+  }
+
+
 }

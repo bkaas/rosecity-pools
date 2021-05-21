@@ -1,6 +1,7 @@
 import React from "react"
 
 import Layout from "../components/layout.js"
+import Dropdown from "../components/dropdown.js"
 import teamIcons from "../components/teamIcons.js"
 import * as styles from "../styles/teams.module.css"
 
@@ -84,8 +85,10 @@ function Team(props) {
     totalPointsElement = '';
   }
 
+  const teamContainerClass = props.teamType ? `${styles.teamContainer} ${styles.standingsContainer}` : styles.teamContainer;
+
   return (
-    <div className={styles.teamContainer}>
+    <div className={teamContainerClass}>
       <div className={styles.teamBackground}>
         <div className={styles.tableHeader}>
           <h3>{props.teamData.name}</h3>
@@ -111,9 +114,14 @@ export default class TeamGrid extends React.Component {
           logo: '',
         }],
       }],
+      sortIndex: 0, // Default to alphabetical (for now)
     };
 
+    // this.sortOptions = ['Alphabetical', 'Draft Order', 'Standings'];
+    this.sortOptions = ['Alphabetical', 'Draft Order', 'Standings'];
+
     this.assembleStandingsData = this.assembleStandingsData.bind(this);
+    this.onSortSelect = this.onSortSelect.bind(this);
   }
 
   componentDidMount() {
@@ -168,7 +176,48 @@ export default class TeamGrid extends React.Component {
 
   }
 
+  onSortSelect(selectedOption) {
+
+    const standingsData = this.assembleStandingsData();
+    // Set the sort order
+    let sortCallback;
+    switch(this.sortOptions.indexOf(selectedOption)) {
+      case 0: // Alphabetical
+        sortCallback = (teamA, teamB) => {
+          const nameTeamA = teamA.name.toUpperCase();
+          const nameTeamB = teamB.name.toUpperCase();
+          return (nameTeamA < nameTeamB) ? -1 : (nameTeamA > nameTeamB) ? 1 : 0;
+        };
+        break;
+      case 1: // Draft Order
+        // TODO
+        break;
+      case 2: // Standings
+      default:
+        // Copy the standingsData order
+        const standingsTeamOrder = standingsData.stats.map( ({firstname}) => firstname );
+        sortCallback = (teamA, teamB) => {
+          return standingsTeamOrder.indexOf(teamA.name) - standingsTeamOrder.indexOf(teamB.name);
+        };
+    }
+
+    this.setState( (state) => {
+      return ({
+        team: state.team.sort(sortCallback),
+      });
+    });
+  }
+
   render() {
+
+    // Create standings table
+    const standingsData = this.assembleStandingsData();
+    // console.log(standingsData);
+
+
+    // this.state.team
+
+    // TODO revisit this block
     // console.log('this.state.team');
     console.log(this.state.team);
     let teams;
@@ -189,19 +238,39 @@ export default class TeamGrid extends React.Component {
 
     }
 
-    // Create standings table
-    const standingsData = this.assembleStandingsData();
-    console.log(standingsData);
 
     return (
       <Layout>
-        <div className={styles.teamsPageContainer}>
+        <div className={styles.standingsBar}>
+          <button>Standings</button>{/* TODO This probably doesn't need to be a button */}
+        </div>
+        <div className={styles.standingsDropdown}>
+          <Team
+            teamData={standingsData}
+            teamType="standings"
+          />
+        </div>
+        <div className={styles.teamsMain}>
+
           <div className={styles.standingsPane}>
             <Team teamData={standingsData} teamType="standings"/>
           </div>
-          <div className={styles.teamGrid}>
-            {teams}
+
+          <div className={styles.teamsPane}>
+            <div className={styles.sortBar}>
+              <Dropdown
+                selectId="sortBy"
+                label="Sort By:"
+                selectName="sortBy"
+                options={this.sortOptions}
+                onSelect={this.onSortSelect}
+              />
+            </div>
+            <div className={styles.teamGrid}>
+              {teams}
+            </div>
           </div>
+
         </div>
       </Layout>
     );
