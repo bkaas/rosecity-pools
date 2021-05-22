@@ -1,8 +1,8 @@
 import React from "react"
 
-import Layout from "../components/layout.js"
-import Dropdown from "../components/dropdown.js"
-import teamIcons from "../components/teamIcons.js"
+import Layout from "../components/Layout.js"
+import Dropdown from "../components/Dropdown.js"
+import teamIcons from "../components/TeamIcons.js"
 import * as styles from "../styles/teams.module.css"
 
 export default function TeamsPage() {

@@ -1,8 +1,8 @@
 import React from "react"
-import DraftForm from "./draftForm.js"
-import AdminBar from "./adminBar.js"
-import AutoComplete from "./autocomplete.js"
-import teamIcons from "../components/teamIcons.js";
+import DraftForm from "./DraftForm.js"
+import AdminBar from "./AdminBar.js"
+import AutoComplete from "./Autocomplete.js"
+import teamIcons from "./TeamIcons.js";
 import * as styles from "../styles/draftmain.module.css"
 import * as adminStyles from "../styles/adminbar.module.css"
 

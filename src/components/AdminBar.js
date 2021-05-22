@@ -1,7 +1,7 @@
 import React from "react"
 
-import DraftForm from "./draftForm.js"
-import LeagueSelection from "./leagueSelection.js"
+import DraftForm from "./DraftForm.js"
+import LeagueSelection from "./LeagueSelection.js"
 
 import * as styles from "../styles/adminbar.module.css"
 import * as generalStyles from "../styles/generalStyles.module.css"

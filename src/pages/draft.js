@@ -1,9 +1,9 @@
 import React from "react"
 import { Router } from "@reach/router"
-import Layout from "../components/layout.js"
-import DraftMain from "../components/draftmain.js"
-import Login from "../components/login.js"
-import PrivateRoute from "../components/privateRoute.js"
+import Layout from "../components/Layout.js"
+import DraftMain from "../components/Draftmain.js"
+import Login from "../components/Login.js"
+import PrivateRoute from "../components/PrivateRoute.js"
 
 export default function Draft() {
 

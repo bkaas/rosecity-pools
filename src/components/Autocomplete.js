@@ -150,7 +150,7 @@ export default class AutoComplete extends React.Component {
     }
 
     // Pressed ESC
-    else if (e.keyCode == 27) {
+    else if (e.keyCode === 27) {
       // First ESC click: Clear suggested input and suggestions menu
       // Second ESC click: Clear typed input altogether
 
