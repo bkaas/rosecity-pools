@@ -47,7 +47,7 @@
 .teamContainer {
   flex: 1 250px;
   border: 2px solid #e0e0e0;
-  border-radius: 1em;
+  border-radius: 1.5em;
   overflow: auto;
   margin: 0.5em;
 }

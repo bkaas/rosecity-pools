@@ -33,6 +33,7 @@ class TeamGrid extends React.Component {
       }],
       sortIndex: 1, // Default to draft order sort
       isStandingsDropdownVisible: false,
+      fetchErr: false,
     };
 
     // this.sortOptions = ['Alphabetical', 'Draft Order', 'Standings'];
@@ -63,10 +64,14 @@ class TeamGrid extends React.Component {
       .then(data => {
         this.setState({
           team: data,
+          fetchErr: false,
         })
 
         // Sort the teams when they first mount
         this.onSortSelect(this.sortOptions[this.state.sortIndex]);
+      })
+      .catch(error => {
+        this.setState({ fetchErr: true });
       });
 
   }
@@ -146,6 +151,16 @@ class TeamGrid extends React.Component {
   }
 
   render() {
+
+    if (this.state.fetchErr) {
+      return(
+
+        <div className={styles.fetchError}>
+          <p>Failed to fetch team data from server.</p>
+        </div>
+
+      );
+    }
 
     // Create standings table
     const standingsData = this.assembleStandingsData();

@@ -28,28 +28,21 @@ export default class Login extends React.Component {
   }
 
   handleSubmit(event) {
-    event.preventDefault()
-    handleLogin(this.state)
+    event.preventDefault();
+    handleLogin(this.state);
+    this.props.handleLogin();
   }
 
   render() {
-    console.log("Login component render.")
-
-    if (isLoggedIn()) {
-      navigate(this.route)
-    }
 
     return (
       <>
         <form
           className={styles.loginForm}
           method="post"
-          onSubmit={event => {
-            this.handleSubmit(event)
-            navigate(this.route)
-          }}
+          onSubmit={this.handleSubmit}
         >
-          <label for="password">Enter draft password</label>
+          <label htmlFor="password">Enter draft password</label>
           <input
             type="password"
             name="password"
