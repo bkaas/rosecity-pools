@@ -1,5 +1,4 @@
 import React from "react"
-import DraftForm from "./DraftForm.js"
 import AdminBar from "./AdminBar.js"
 import AutoComplete from "./Autocomplete.js"
 import teamIcons from "./TeamIcons.js";
@@ -9,7 +8,6 @@ import * as adminStyles from "../styles/adminbar.module.css"
 import { isAdmin } from "../services/auth.js"
 
 // TODO
-// - Submit draft to database
 // - Passwords: more secure
 // - Player logos in draft table
 // - View teams:

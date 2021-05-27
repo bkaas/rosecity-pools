@@ -32,6 +32,13 @@
   flex: 1 1 1em; /* TODO better understand this */
 }
 
+.manageTeamButtons * {
+  width: 1.5em;
+  margin: 0.3em;
+  display: inline-block;
+  vertical-align: top;
+}
+
 .deleteTeamX {
   color: red;
 }

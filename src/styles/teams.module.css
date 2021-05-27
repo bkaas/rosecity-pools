@@ -86,6 +86,10 @@
   width: 2em;
 }
 
+.eliminated {
+  text-decoration: line-through;
+}
+
 h3 {
   margin: 0.4em;
   padding: 0;

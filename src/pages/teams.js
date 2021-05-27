@@ -29,6 +29,7 @@ class TeamGrid extends React.Component {
           points: '',
           logo: '',
           pick: '', // added for sorting teams by draft position
+          eliminated: false, // changes to true when a team is eliminated
         }],
       }],
       sortIndex: 1, // Default to draft order sort
@@ -309,12 +310,17 @@ function TeamTableEntries(props) {
         }
       }
 
+      let playerClass = "";
+      if (stats.eliminated) {
+        playerClass = styles.eliminated;
+      }
+
       return(
         <tr key={ii}>
           {/*<td dangerouslySetInnerHTML={{__html: stats.logo}}/>*/}
           {/*TODO: Setting the names to lowercase here so I can capitalize in css*/}
           <td>{logo}</td>
-          <td>
+          <td className={playerClass}>
             {/*{teamIcons.newyorki}*/}
             {playername}
           </td>

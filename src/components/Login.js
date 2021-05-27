@@ -1,8 +1,7 @@
 // Ref: https://www.gatsbyjs.com/tutorial/authentication-tutorial/
 
 import React from "react"
-import { navigate } from "gatsby"
-import { handleLogin, isLoggedIn } from "../services/auth"
+import { handleLogin } from "../services/auth"
 
 import * as styles from "../styles/login.module.css"
 

@@ -45,7 +45,7 @@ export default class LeagueSelection extends React.Component {
 
     const leagueOptions = this.state.leagues.map( league => {
       return (
-        <option key={league} value={league} />
+        <option key={league} value={league}>{league}</option>
       );
     });
 
