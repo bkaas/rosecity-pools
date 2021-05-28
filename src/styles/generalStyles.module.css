@@ -1,8 +1,3 @@
-/* buttonStyles.module.css */
-
-/*.buttonStyles input[type=submit],
-.buttonStylesOff input[type=submit],
-.buttonStyles button*/
 .draftButton,
 .draftButtonOff
 {
@@ -10,8 +5,6 @@
   border-radius: 4px;
 }
 
-/*.buttonStyles input[type=submit],
-.buttonStyles button*/
 .draftButton
 {
   color: #e0e0e0;
@@ -19,7 +12,6 @@
   border-color: rgb(45, 70, 130);
 }
 
-/*.buttonStylesOff input[type=submit]*/
 .draftButtonOff
 {
   color: #e0e0e0;
@@ -35,10 +27,6 @@
   background-color: #e0e0e0;
 }
 
-/*.buttonStyles input[type=submit]:focus,
-.buttonStyles input[type=text]:focus,
-.buttonStyles button:focus*/
-/* TODO idk if you can add a psuedo class to a class name */
 .draftButton:focus,
 .draftText:focus
 {

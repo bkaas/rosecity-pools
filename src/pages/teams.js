@@ -1,10 +1,14 @@
 import React from "react"
+import BeatLoader from "react-spinners/BeatLoader"
 
 import Layout from "../components/Layout.js"
+import Error from "../components/Error.js"
 import Dropdown from "../components/Dropdown.js"
 import teamIcons from "../components/TeamIcons.js"
 import * as styles from "../styles/teams.module.css"
 
+// Layout split from the TeamGrid component so the navbar
+// doesn't refresh with the api call in TeamGrid
 export default function TeamsPage() {
 
   return (
@@ -14,7 +18,6 @@ export default function TeamsPage() {
   );
 
 }
-
 
 class TeamGrid extends React.Component {
 
@@ -32,12 +35,12 @@ class TeamGrid extends React.Component {
           eliminated: false, // changes to true when a team is eliminated
         }],
       }],
-      sortIndex: 1, // Default to draft order sort
+      sortIndex: 2, // Default to standings sort
       isStandingsDropdownVisible: false,
       fetchErr: false,
+      loading: true,
     };
 
-    // this.sortOptions = ['Alphabetical', 'Draft Order', 'Standings'];
     this.sortOptions = ['Alphabetical', 'Draft Order', 'Standings'];
 
     this.assembleStandingsData = this.assembleStandingsData.bind(this);
@@ -66,13 +69,17 @@ class TeamGrid extends React.Component {
         this.setState({
           team: data,
           fetchErr: false,
+          loading: false,
         })
 
         // Sort the teams when they first mount
         this.onSortSelect(this.sortOptions[this.state.sortIndex]);
       })
       .catch(error => {
-        this.setState({ fetchErr: true });
+        this.setState({
+          fetchErr: true,
+          loading: false,
+        });
       });
 
   }
@@ -82,7 +89,6 @@ class TeamGrid extends React.Component {
   // Pass the object into the Team component for standings
   // The "name" of the team will be "Standings"
   // The stats will be each team name and their total points
-
 
     const standingsData = this.state.team.map( team => {
 
@@ -153,13 +159,46 @@ class TeamGrid extends React.Component {
 
   render() {
 
+    // Handle loading teams
+    if (this.state.loading) {
+      return (
+        <div className={styles.loader}>
+          <BeatLoader color={"#2d4682"}/>
+        </div>
+      );
+    }
+
+    // Handle fetch error
     if (this.state.fetchErr) {
       return(
-
-        <div className={styles.fetchError}>
+        <Error>
           <p>Failed to fetch team data from server.</p>
-        </div>
+        </Error>
+      );
+    }
 
+    // Handle missing team data
+    const emptyTeams = {
+      name: '',
+      stats: [{
+        lastname: '',
+        firstname: '',
+        points: '',
+        logo: '',
+        pick: '',
+        eliminated: false,
+      }],
+    };
+
+    const isDataEmpty =
+      this.state.team.length === 1 &&
+      JSON.stringify(emptyTeams) === JSON.stringify(this.state.team[0]);
+
+    if (isDataEmpty) {
+      return (
+        <Error>
+          <p>Empty team data received from server.</p>
+        </Error>
       );
     }
 
@@ -167,35 +206,18 @@ class TeamGrid extends React.Component {
     const standingsData = this.assembleStandingsData();
     // console.log(standingsData);
 
-
-    // this.state.team
-
-    // TODO revisit this block
-    // console.log('this.state.team');
-    // console.log(this.state.team);
-    let teams;
-    if (!this.state.team.length) {
-      teams = <p>No data for this league and year</p>;
-    }
-    else {
-
-      if (this.state.team[0].stats.length === 1) {
-        return null;
-      }
-
-      teams = this.state.team.map( (team, ii) => {
+    const teams = this.state.team.map( (team, ii) => {
         return (
           <Team key={ii} teamData={team} />
         );
       });
-
-    }
 
     const standingsDropdownClass = this.state.isStandingsDropdownVisible ?
       `${styles.standingsDropdown} ${styles.visible}` : styles.standingsDropdown;
 
     return (
       <>
+        {/*Standings bar and its dropdown*/}
         <div className={styles.standingsBar}>
           <button onClick={this.onStandingsDropdownClick}>
             Standings
@@ -207,6 +229,9 @@ class TeamGrid extends React.Component {
             teamType="standings"
           />
         </div>
+
+        {/*Main area of the page. Includes the standings pane, the
+        main teams pane, and the sort by drop down.*/}
         <div className={styles.teamsMain}>
 
           <div className={styles.standingsPane}>
@@ -235,7 +260,8 @@ class TeamGrid extends React.Component {
   }
 }
 
-
+// Encapsulate the TeamTable within some divs and include
+// the team's total points and team name
 function Team(props) {
 
   let totalPoints;
@@ -266,7 +292,8 @@ function Team(props) {
   );
 }
 
-
+// Splits the table header row from the team data.
+// Used for the standings and for each team.
 function TeamTable(props) {
 
   let headings;
@@ -291,19 +318,23 @@ function TeamTable(props) {
   );
 }
 
-
+// Format each table row from the stats data
 function TeamTableEntries(props) {
 
   return (
     props.stats.map( (stats, ii) => {
+      // Setting the names to lowercase here so I can capitalize in css
       const playername = (stats.firstname + ' ' + stats.lastname).toLowerCase();
 
       let logo;
+      // teamType is equal to "standings" or otherwise empty
       if (props.teamType) {
+        // This is the team ranking for the standings table
         logo = ii + 1;
       }
       else {
         if (stats.logo) {
+          // Remove the ".svg" from the logo string to index the teamIcons object
           logo = teamIcons[stats.logo.slice(0, -4)];
         } else {
           logo = '';
@@ -317,11 +348,8 @@ function TeamTableEntries(props) {
 
       return(
         <tr key={ii}>
-          {/*<td dangerouslySetInnerHTML={{__html: stats.logo}}/>*/}
-          {/*TODO: Setting the names to lowercase here so I can capitalize in css*/}
           <td>{logo}</td>
           <td className={playerClass}>
-            {/*{teamIcons.newyorki}*/}
             {playername}
           </td>
           <td>{stats.points}</td>

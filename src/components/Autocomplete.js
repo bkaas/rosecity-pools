@@ -106,7 +106,6 @@ export default class AutoComplete extends React.Component {
       console.log("Pressed up arrow");
       console.log(activeSuggestion);
 
-      // TODO Can the state be read outside of setState here? Async updates to state could mess with it?
       if (this.state.activeSuggestion === -1) {
         return;
       }
@@ -134,7 +133,6 @@ export default class AutoComplete extends React.Component {
       console.log("Pressed down arrow");
       console.log(activeSuggestion);
 
-      // TODO Can the state be read outside of setState here? Async updates to state could mess with it?
       if (this.state.activeSuggestion + 1 === this.state.filteredSuggestions.length) {
         return;
       }

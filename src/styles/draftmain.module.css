@@ -32,18 +32,12 @@
 
 .draftTable td {
   padding: 0.2em 0.4em;
-  /*font-family: consolas, lucida console, courier new, monospace;*/
 }
 
 /* Fill empty table cells */
 /* Ref: https://stackoverflow.com/questions/42225196/prevent-collapse-of-empty-rows-in-html-table-via-css/42225797 */
 .draftTable td:empty::after {
   content: "\00a0";
-}
-
-/* TODO rename this */
-.draftControls {
-  margin: 1em;
 }
 
 .draftSelection {

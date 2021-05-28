@@ -43,7 +43,7 @@ export default class DraftMain extends React.Component {
       playerList:     [],
     };
 
-    // TODO should this be in state
+    // TODO move to state when creating a user toggle for it
     this.snake = true; // Bool to toggle the type of draft
     this.leagueName = '';
     this.selectedPlayer = '';
@@ -90,9 +90,8 @@ export default class DraftMain extends React.Component {
     });
   }
 
-  handleNewPick(playerName, playerId, playerLogo) { // TODO should the first arg be an event?
-    // TODO
-    // figure out how to supply players to the pick form
+  handleNewPick(playerName, playerId, playerLogo) {
+    // TODO add logos to the draft table
 
     const newPick = new Pick();
     // console.log(newPick);
@@ -375,7 +374,6 @@ function DraftTable(props) {
     });
 
     return (
-      // TODO adjust the key? Currently round - 1 so probably ok
       <tr key={ii}>
         <td>{ii + 1}</td>
         {draftTableRow}
