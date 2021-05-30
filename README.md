@@ -1,105 +1,67 @@
-<!-- AUTO-GENERATED-CONTENT:START (STARTER) -->
-<p align="center">
-  <a href="https://www.gatsbyjs.com">
-    <img alt="Gatsby" src="https://www.gatsbyjs.com/Gatsby-Monogram.svg" width="60" />
-  </a>
-</p>
-<h1 align="center">
-  Gatsby's hello-world starter
-</h1>
+# rosecity-pools-frontend
 
-Kick off your project with this hello-world boilerplate. This starter ships with the main Gatsby configuration files you might need to get up and running blazing fast with the blazing fast app generator for React.
+[Rose City Pools](https://rosecitypools.info) is my first foray into the world of web development. It has conveniently served two purposes: to begin my journey as a web developer, and to provide a useful tool for an annual NHL playoffs fantasy league that has taken place for over a decade.
 
-_Have another more specific idea? You may want to check out our vibrant collection of [official and community-created starters](https://www.gatsbyjs.com/docs/gatsby-starters/)._
+## History
 
-## 🚀 Quick start
+### Iteration 1
 
-1.  **Create a Gatsby site.**
+For the first several years, the fantasy league consisted of a few high school students drafting teams in a living room at Darren's house (no introduction necessary) in Welland ON (the Rose City). We'd eat pizza, cross off players from printed out lists, record our teams on paper, and update game stats by hand on a nightly basis. Standings were communicated regularly via email.
 
-    Use the Gatsby CLI to create a new site, specifying the hello-world starter.
+### Iteration 2
 
-    ```shell
-    # create a new Gatsby site using the hello-world starter
-    gatsby new my-hello-world-starter https://github.com/gatsbyjs/gatsby-starter-hello-world
-    ```
+The second iteration involved the use of Google Sheets for tracking the teams, and manual stat updates. Eventually we got tired of manually updating the player points, so I took it upon myself to develop an automated solution. Using python and the requests library, I scraped data from nhl.com and updated the stats in the Google Sheets on a regular basis. Although it was run on a schedule, it required my laptop to always be running.
 
-1.  **Start developing.**
+### Iteration 3
 
-    Navigate into your new site’s directory and start it up.
+Introducing [rosecitypools.info](https://rosecitypools.info)!
 
-    ```shell
-    cd my-hello-world-starter/
-    gatsby develop
-    ```
 
-1.  **Open the source code and start editing!**
+## Front End Description
 
-    Your site is now running at `http://localhost:8000`!
+[rosecitypools.info](https://rosecitypools.info) is a [Gatsby](https://www.gatsbyjs.com/) site developed using [React](https://reactjs.org/). The goal was to learn React (and Javascript in general) so the development framework had to be Javascript based. My original plan was to start with a blog-type website, so I focused on Gatsby due to its popularity as a static site generator. Once I switched my project to the fantasy sports website, I just stuck with Gatsby since I already had gone through some of its tutorials. Ultimately I just wanted to start something. The intent wass a learning experience and I learn best by doing!
 
-    _Note: You'll also see a second link: _`http://localhost:8000/___graphql`_. This is a tool you can use to experiment with querying your data. Learn more about using this tool in the [Gatsby tutorial](https://www.gatsbyjs.com/tutorial/part-five/#introducing-graphiql)._
+### Stack
 
-    Open the `my-hello-world-starter` directory in your code editor of choice and edit `src/pages/index.js`. Save your changes and the browser will update in real time!
+- Front end: Gatsby (React)
+- [Back end: Node.js (Express)](https://github.com/bkaas/rosecity-pools-backend)
+- Database: PostgreSQL
+- Server: Nginx / Ubuntu server, hosted on a Digital Ocean droplet.
 
-## 🚀 Quick start (Gatsby Cloud)
+## Usage
 
-Deploy this starter with one click on [Gatsby Cloud](https://www.gatsbyjs.com/cloud/):
+### [Home Page](https://rosecitypools.info/)
 
-[<img src="https://www.gatsbyjs.com/deploynow.svg" alt="Deploy to Gatsby Cloud">](https://www.gatsbyjs.com/dashboard/deploynow?url=https://github.com/gatsbyjs/gatsby-starter-hello-world)
+The proper way to use the home page is to immediately redirect your eyes away from the hastily hacked together logo.
 
-## 🧐 What's inside?
+### [Teams](https://rosecitypools.info/teams)
 
-A quick look at the top-level files and directories you'll see in a Gatsby project.
+The teams page displays each fantasy team roster in the league along with the number of points for each player. The only stat tracked for this league is playoff points. There is also a list of the league standings and the ability to sort the teams in different ways.
 
-    .
-    ├── node_modules
-    ├── src
-    ├── .gitignore
-    ├── .prettierrc
-    ├── gatsby-browser.js
-    ├── gatsby-config.js
-    ├── gatsby-node.js
-    ├── gatsby-ssr.js
-    ├── LICENSE
-    ├── package-lock.json
-    ├── package.json
-    └── README.md
+**Future Growth:**
+- Once there is data for multiple years (and even multiple leagues??), a filter to select which year and which league will be added.
 
-1.  **`/node_modules`**: This directory contains all of the modules of code that your project depends on (npm packages) are automatically installed.
+### [Draft](https://rosecitypools.info/draft)
 
-2.  **`/src`**: This directory will contain all of the code related to what you will see on the front-end of your site (what you see in the browser) such as your site header or a page template. `src` is a convention for “source code”.
+The intention of the draft page is to provide a platform where all of the league members can draft their teams virtually, similar to other fantasy sports platforms. Unfortunately the draft page wasn't completed in time for the 2021 playoffs draft so we opted for Google Sheets for recording the teams. I successfully used the draft page to populate the PostgreSQL database with the draft results after the draft had taken place, using the page as if we had drafted live.
 
-3.  **`.gitignore`**: This file tells git which files it should not track / not maintain a version history for.
+#### Usage
 
-4.  **`.prettierrc`**: This is a configuration file for [Prettier](https://prettier.io/). Prettier is a tool to help keep the formatting of your code consistent.
+The draft page requires a login with the intention of allowing only users drafting for a specific league on the page together. There is an admin password and a regular user password. The admin has the ability to:
+- select the league that is drafting
+- create teams
+- adjust the order the teams will draft
+- begin the draft, undo picks
+- reconfigure team order after the draft started
+- and submit the results to the database.
 
-5.  **`gatsby-browser.js`**: This file is where Gatsby expects to find any usage of the [Gatsby browser APIs](https://www.gatsbyjs.com/docs/browser-apis/) (if any). These allow customization/extension of default Gatsby settings affecting the browser.
+Each user has access to a simple form (with an autocomplete function) for selecting players to draft. Each player is entered into a table so all users can track their teams.
 
-6.  **`gatsby-config.js`**: This is the main configuration file for a Gatsby site. This is where you can specify information about your site (metadata) like the site title and description, which Gatsby plugins you’d like to include, etc. (Check out the [config docs](https://www.gatsbyjs.com/docs/gatsby-config/) for more detail).
+>**_Note:_** The submit draft button has purposely been disabled to prevent extra unwanted data accidentally added to the database.
 
-7.  **`gatsby-node.js`**: This file is where Gatsby expects to find any usage of the [Gatsby Node APIs](https://www.gatsbyjs.com/docs/node-apis/) (if any). These allow customization/extension of default Gatsby settings affecting pieces of the site build process.
+**Future Growth**
+- Changes to the draft page are only viewed by the user who makes the change (client side state changes in React). The fundamental implementation needs to be altered to use WebSockets (or similar) so all users can draft their teams and follow along with the simultaneously.
+- Draft page password implementation is very basic and is not secure. A more secure implementation is required.
+- The draft type is snaked by default (draft order reverses each round). Add an option to toggle this feature.
+- Add team logos to the draft table.
 
-8.  **`gatsby-ssr.js`**: This file is where Gatsby expects to find any usage of the [Gatsby server-side rendering APIs](https://www.gatsbyjs.com/docs/ssr-apis/) (if any). These allow customization of default Gatsby settings affecting server-side rendering.
-
-9.  **`LICENSE`**: This Gatsby starter is licensed under the 0BSD license. This means that you can see this file as a placeholder and replace it with your own license.
-
-10. **`package-lock.json`** (See `package.json` below, first). This is an automatically generated file based on the exact versions of your npm dependencies that were installed for your project. **(You won’t change this file directly).**
-
-11. **`package.json`**: A manifest file for Node.js projects, which includes things like metadata (the project’s name, author, etc). This manifest is how npm knows which packages to install for your project.
-
-12. **`README.md`**: A text file containing useful reference information about your project.
-
-## 🎓 Learning Gatsby
-
-Looking for more guidance? Full documentation for Gatsby lives [on the website](https://www.gatsbyjs.com/). Here are some places to start:
-
-- **For most developers, we recommend starting with our [in-depth tutorial for creating a site with Gatsby](https://www.gatsbyjs.com/tutorial/).** It starts with zero assumptions about your level of ability and walks through every step of the process.
-
-- **To dive straight into code samples, head [to our documentation](https://www.gatsbyjs.com/docs/).** In particular, check out the _Guides_, _API Reference_, and _Advanced Tutorials_ sections in the sidebar.
-
-## 💫 Deploy
-
-[Build, Deploy, and Host On The Only Cloud Built For Gatsby](https://www.gatsbyjs.com/cloud/)
-
-Gatsby Cloud is an end-to-end cloud platform specifically built for the Gatsby framework that combines a modern developer experience with an optimized, global edge network.
-
-<!-- AUTO-GENERATED-CONTENT:END -->

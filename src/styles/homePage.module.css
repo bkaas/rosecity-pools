@@ -1,0 +1,15 @@
+.logoContainer {
+  display: flex;
+  flex-flow: row wrap;
+  align-items: center;
+  justify-content: center;
+}
+
+.logoContainer svg {
+  max-width: 80%;
+}
+
+.title {
+  text-align: center;
+  margin: 1.5em;
+}
