@@ -19,7 +19,7 @@ Introducing [rosecitypools.info](https://rosecitypools.info)!
 
 ## Front End Description
 
-[rosecitypools.info](https://rosecitypools.info) is a [Gatsby](https://www.gatsbyjs.com/) site developed using [React](https://reactjs.org/). The goal was to learn React (and Javascript in general) so the development framework had to be Javascript based. My original plan was to start with a blog-type website, so I focused on Gatsby due to its popularity as a static site generator. Once I switched my project to the fantasy sports website, I just stuck with Gatsby since I already had gone through some of its tutorials. Ultimately I just wanted to start something. The intent wass a learning experience and I learn best by doing!
+[rosecitypools.info](https://rosecitypools.info) is a [Gatsby](https://www.gatsbyjs.com/) site developed using [React](https://reactjs.org/). The goal was to learn React (and Javascript in general) so the development framework had to be Javascript based. My original plan was to start with a blog-type website, so I focused on Gatsby due to its popularity as a static site generator. Once I switched my project to the fantasy sports website, I just stuck with Gatsby since I already had gone through some of its tutorials. That may sound lazy, but the goal of the project was to learn, which is best done by _doing_, with the idea of iterating the design and continuous improvement.
 
 ### Stack
 
@@ -43,7 +43,7 @@ The teams page displays each fantasy team roster in the league along with the nu
 
 ### [Draft](https://rosecitypools.info/draft)
 
-The intention of the draft page is to provide a platform where all of the league members can draft their teams virtually, similar to other fantasy sports platforms. Unfortunately the draft page wasn't completed in time for the 2021 playoffs draft so we opted for Google Sheets for recording the teams. I successfully used the draft page to populate the PostgreSQL database with the draft results after the draft had taken place, using the page as if we had drafted live.
+The intention of the draft page is to provide a platform where all of the league members can draft their teams virtually, similar to other fantasy sports platforms. Unfortunately the draft page wasn't completed in time for the 2021 NHL playoffs so we opted to use Google Sheets for recording the teams. The draft page did provide useful despite its drawbacks (see [Future Growth](#draft-future-growth) below) as I successfully used the draft page interface to populate the PostgreSQL database with the draft results after the draft had taken place.
 
 #### Usage
 
@@ -57,11 +57,11 @@ The draft page requires a login with the intention of allowing only users drafti
 
 Each user has access to a simple form (with an autocomplete function) for selecting players to draft. Each player is entered into a table so all users can track their teams.
 
->**_Note:_** The submit draft button has purposely been disabled to prevent extra unwanted data accidentally added to the database.
+>**_Note:_** The submit draft button has purposely been disabled to prevent extra unwanted data accidentally added to the database. This is a temporary _"band aid"_ fix until the proper logic is implemented.
 
-**Future Growth**
-- Changes to the draft page are only viewed by the user who makes the change (client side state changes in React). The fundamental implementation needs to be altered to use WebSockets (or similar) so all users can draft their teams and follow along with the simultaneously.
-- Draft page password implementation is very basic and is not secure. A more secure implementation is required.
+<a name="draft-future-growth">**Future Growth**</a>
+- Changes to the draft page are only viewed by the user who makes the change (client side state changes in React). The fundamental implementation needs to be altered to use WebSockets (or similar) so all users can draft their teams and view the pages updates as a collective.
+- The draft page password implementation is very basic and is not secure. A more secure implementation is required.
 - The draft type is snaked by default (draft order reverses each round). Add an option to toggle this feature.
 - Add team logos to the draft table.
 
