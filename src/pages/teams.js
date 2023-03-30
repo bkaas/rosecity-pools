@@ -39,6 +39,7 @@ class TeamGrid extends React.Component {
       isStandingsDropdownVisible: false,
       fetchErr: false,
       loading: true,
+      year: new Date().getFullYear(), // default to the current year
     };
 
     this.sortOptions = ['Alphabetical', 'Draft Order', 'Standings'];
@@ -46,10 +47,15 @@ class TeamGrid extends React.Component {
     this.assembleStandingsData = this.assembleStandingsData.bind(this);
     this.onSortSelect = this.onSortSelect.bind(this);
     this.onStandingsDropdownClick = this.onStandingsDropdownClick.bind(this);
+    this.onYearSelect = this.onYearSelect.bind(this);
+    this.fetchStats = this.fetchStats.bind(this);
   }
 
   componentDidMount() {
+    this.fetchStats(this.state.year);
+  }
 
+  fetchStats(year) {
     let fetchUrl;
     if (process.env.GATSBY_API_URL) {
       fetchUrl = process.env.GATSBY_API_URL + "/api/stats";
@@ -57,6 +63,9 @@ class TeamGrid extends React.Component {
     else {
      fetchUrl = "/api/stats";
     }
+
+    // Append the query for the stats year on the URL
+    fetchUrl += "/?year=" + year;
 
     fetch(fetchUrl)
       .then(res => {
@@ -70,6 +79,7 @@ class TeamGrid extends React.Component {
           team: data,
           fetchErr: false,
           loading: false,
+          year: year,
         })
 
         // Sort the teams when they first mount
@@ -157,6 +167,13 @@ class TeamGrid extends React.Component {
     });
   }
 
+  onYearSelect(selectedYear) {
+    // Update the year within fetchStats()
+    // If updating prior to the call, it wasn't updating in time for the fetch
+    this.setState({loading: true});
+    this.fetchStats(selectedYear);
+  }
+
   render() {
 
     // Handle loading teams
@@ -215,6 +232,15 @@ class TeamGrid extends React.Component {
     const standingsDropdownClass = this.state.isStandingsDropdownVisible ?
       `${styles.standingsDropdown} ${styles.visible}` : styles.standingsDropdown;
 
+    // Calculate the number of years the pool has been running for
+    // the year selection drop down menu
+    // TODO, we should fetch this from the backend which "SELECT DISTINCT"
+    // from the database
+    const startYear = 2020;
+    const nYears = new Date().getFullYear() - startYear + 1;
+    // Generates: [2020, 2021, 2022 .... up to the current year]
+    const yearArray = [...Array(nYears).keys()].map(x => x + startYear);
+
     return (
       <>
         {/*Standings bar and its dropdown*/}
@@ -240,6 +266,14 @@ class TeamGrid extends React.Component {
 
           <div className={styles.teamsPane}>
             <div className={styles.sortBar}>
+              <Dropdown
+                selectId="poolYear"
+                label="Year:"
+                selectName="poolYear"
+                options={yearArray}
+                onSelect={this.onYearSelect}
+                initialSelect={this.state.year}
+              />
               <Dropdown
                 selectId="sortBy"
                 label="Sort By:"

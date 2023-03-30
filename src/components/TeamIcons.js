@@ -32,8 +32,9 @@ import Vancouver from "../../assets/vancouver.svg"
 import Newjersey from "../../assets/newjersey.svg"
 import Anaheim from "../../assets/anaheim.svg"
 import Buffalo from "../../assets/buffalo.svg"
+import Seattle from "../../assets/seattle.svg"
 
-
+// indexed by name according to the nhl.teams logo string
 const teamIcons =
   {
     carolina:     <Carolina />,
@@ -67,6 +68,7 @@ const teamIcons =
     newjersey:    <Newjersey />,
     anaheim:      <Anaheim />,
     buffalo:      <Buffalo />,
+    seattle:      <Seattle />,
   };
 
 
